@@ -1,0 +1,35 @@
+// Announcement Tag
+.anno_tag {
+  background-color: #606266;
+  color: $color-background;
+  &_1 {
+    background-color: #8577ff;
+  }
+  &_2 {
+    background-color: #00b5ad;
+  }
+  &_3 {
+    background-color: #ff8964;
+  }
+  &_4 {
+    background-color: #29a1f7;
+  }
+  &_5 {
+    background-color: #ff6969;
+  }
+}
+
+// Survey Tag
+.survey_tag {
+  background-color: #606266;
+  color: $color-background;
+  &_unfilled {
+    background-color: #00b5ad;
+  }
+  &_fillIn {
+    background-color: #ff8964;
+  }
+  &_expired {
+    background-color: #A2A2A2;
+  }
+}

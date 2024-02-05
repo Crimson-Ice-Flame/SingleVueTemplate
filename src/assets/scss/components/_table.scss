@@ -1,0 +1,39 @@
+.basic_descriptions {
+  .el-descriptions__label {
+    background-color: $color-background-table !important;
+    color: $color-background !important;
+  }
+}
+
+// 在南窗裡的 table
+table.dialog_table {
+  border-spacing: 0;
+  border: 1px solid $color-tableBorder;
+  border-radius: 4px;
+  overflow: hidden;
+  th,
+  td {
+    padding: 8px;
+    border-left: 1px solid $color-tableBorder;
+    border-bottom: 1px solid $color-tableBorder;
+    font-weight: normal;
+    text-align: center;
+    &:first-child {
+      border-left: none;
+    }
+  }
+  thead {
+    background-color: $color-background-table;
+    color: $color-background;
+    tr:last-child {
+      background-color: #228bd6;
+    }
+  }
+  tbody {
+    tr:last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}

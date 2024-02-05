@@ -1,0 +1,80 @@
+.board {
+  padding: 24px;
+  box-sizing: border-box;
+  background-color: $color-background;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px 0 $color-boardShadow;
+
+  &_head {
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+    .buttons {
+      text-align: right;
+    }
+  }
+
+  &_title {
+    padding-left: 4px;
+    margin: 0;
+    border-left: $color-board 2px solid;
+    box-sizing: border-box;
+    color: $color-board;
+    font-size: 16px;
+    line-height: 24px;
+    &.no_border {
+      border: none;
+      padding: 0;
+    }
+  }
+}
+
+.board_card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px 0px $color-boardShadow;
+  .el-card__header {
+    flex: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: none;
+    font-size: 16px;
+  }
+  .el-card__body {
+    flex: 1;
+  }
+
+  .card_title {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  &.is-always-shadow {
+    box-shadow: 0px 3px 10px 0px $color-boardShadow;
+  }
+
+  &.blue {
+    .el-card__header {
+      background-color: $color-board-style1;
+      color: $color-background;
+    }
+  }
+  &.blue_light {
+    .el-card__header {
+      background-color:  $color-board-style2;
+      color: $color-background;
+    }
+  }
+  &.purple {
+    .el-card__header {
+      background-color:  $color-board-style3;
+      color: $color-background;
+    }
+  }
+}
+
+.border_card_margin {
+  margin: 10px;
+}

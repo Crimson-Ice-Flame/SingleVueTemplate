@@ -1,0 +1,146 @@
+.error_page {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  background-image: url('@/assets/images/errorpage/error_bg.webp');
+  background-repeat: no-repeat;
+  background-size: 100% cover 100% cover;
+  background-position: center center;
+  width: 100%;
+  height: 100vh;
+  & .error_content {
+    width: 50%;
+    max-width: 50%;
+    margin: 250px auto auto 29%;
+    display: flex;
+    justify-content: center;
+    flex-flow: row nowrap;
+
+    & .heradline {
+      width: 650px;
+      max-width: 650px;
+      & h1 {
+        font-size: 100px;
+        font-weight: 400;
+        text-align: left;
+        color: #6658dd;
+        margin: 0.1em 0;
+      }
+      & .error-text {
+        font-size: 60px;
+        font-weight: 400;
+        text-align: left;
+        color: #f6f6f6;
+      }
+      & p {
+        color: $color-background;
+        font-size: 18px;
+        font-weight: 400;
+      }
+      & .btn_goBack {
+        margin-top: 40px;
+        & img {
+          margin-left: 7px;
+        }
+      }
+      // & .btn_goBack:hover,
+      // & .btn_goBack:focus {
+      //   @extend %buttonGoBackHover;
+      // }
+    }
+
+    & .img_content {
+      & img {
+        width: 540px;
+        max-width: 540px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  .error_page .error_content {
+    width: 65%;
+    max-width: 65%;
+    margin: 175px auto auto 20%;
+    & .img_content img {
+      width: 500px;
+      max-width: 500px;
+    }
+  }
+}
+
+@media (max-width: 1366px) {
+  .error_page .error_content {
+    width: 70%;
+    max-width: 70%;
+    margin: 175px auto auto 19%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .error_page .error_content {
+    width: 65%;
+    max-width: 65%;
+    margin: 215px auto auto 15%;
+    & .heradline {
+      & h1 {
+        font-size: 5.2rem;
+      }
+      & .error-text {
+        font-size: 3.5rem;
+      }
+      & p {
+        font-size: 0.8rem;
+      }
+    }
+    & .img_content img {
+      width: 450px;
+      max-width: 450px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .error_page .error_content {
+    width: 80%;
+    max-width: 80%;
+    margin: 215px auto auto auto;
+    .heradline {
+      h1 {
+        font-size: 4.5rem;
+      }
+      .error-text {
+        font-size: 2.5rem;
+      }
+    }
+    .img_content img {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .error_page .error_content {
+    width: 90vw;
+    max-width: 90vw;
+    margin: 20px auto auto auto;
+    flex-flow: column nowrap;
+    .img_content {
+      margin-top: 20px;
+      img {
+        width: 70%;
+        max-width: 70%;
+        margin: auto 10%;
+      }
+    }
+  }
+}
+@media (max-width: 414px) {
+  .error_page .error_content {
+    .img_content {
+      margin-top: 40px;
+    }
+  }
+}

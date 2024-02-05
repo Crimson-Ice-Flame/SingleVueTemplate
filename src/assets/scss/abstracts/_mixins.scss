@@ -1,0 +1,54 @@
+// Button
+@mixin btn {
+  width: auto;
+  min-width: 80px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+@mixin btnMedium {
+  width: auto;
+  min-width: 120px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+@mixin btnRadius($height) {
+  height: $height;
+  border-radius: $height * 0.5;
+}
+
+@mixin btnCircle($diameter) {
+  width: $diameter;
+  height: $diameter;
+  border-radius: 50%;
+}
+
+// Response
+@mixin mediaQuery($break-point) {
+  @if $break-point == xl {
+    @media (min-width: 1600px) {
+      @content;
+    }
+  }
+  @if $break-point == lg {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+  @if $break-point == md {
+    @media (min-width: 992px) {
+      @content;
+    }
+  }
+  @if $break-point == sm {
+    @media (min-width: 768px) {
+      @content;
+    }
+  }
+  @if $break-point == xs {
+    @media (max-width: 767px) {
+      @content;
+    }
+  }
+}

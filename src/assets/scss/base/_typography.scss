@@ -1,0 +1,160 @@
+body {
+  @extend %fontFamily;
+  background-color: $color-background;
+  touch-action: none;
+}
+* {
+  touch-action: none;
+}
+a,
+button {
+  cursor: pointer;
+  transition: $base-transition;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+[disabled],
+.is-disabled {
+  filter: grayscale(1) !important;
+  pointer-events: none !important;
+}
+
+[limit],
+.hidden {
+  visibility: hidden;
+  pointer-events: none !important;
+}
+
+// Text Setting
+.text {
+  // color
+  &_edit {
+    color: $color-edit;
+  }
+  &_delete {
+    color: $color-delete;
+  }
+  &_success {
+    color: $color-success;
+  }
+  &_cancel {
+    color: $color-cancel;
+  }
+  &_copy {
+    color: $color-copy;
+  }
+  &_view {
+    color: $color-view;
+  }
+  &_link {
+    color: $color-textLink;
+  }
+  &_required {
+    color: $color-required;
+  }
+  &_abnormal {
+    color: $color-abnormal;
+  }
+
+  // position
+  &_center {
+    text-align: center;
+  }
+  &_right {
+    text-align: right;
+  }
+
+  // size
+  &_base {
+    font-size: var(--org-font-size-base);
+  }
+  &_medium {
+    font-size: var(--el-font-size-medium);
+  }
+  &_large {
+    font-size: var(--el-font-size-large);
+  }
+  &_extra_large {
+    font-size: var(--el-font-size-extra-large);
+  }
+  &_small {
+    font-size: var(--el-font-size-small);
+  }
+  &_extra_small {
+    font-size: var(--el-font-size-extra-small);
+  }
+}
+
+// Width
+.w {
+  &_auto {
+    width: auto !important;
+  }
+  &_100p {
+    width: 100% !important;
+  }
+  &_50 {
+    width: 50px !important;
+  }
+  &_100 {
+    width: 100px !important;
+  }
+}
+
+// Margin
+.m {
+  &_0 {
+    margin: 0 !important;
+  }
+  &t {
+    &_0 {
+      margin-top: 0 !important;
+    }
+    &_1 {
+      margin-top: 10px;
+    }
+    &_2 {
+      margin-top: 24px;
+    }
+  }
+  &b {
+    &_0 {
+      margin-bottom: 0 !important;
+    }
+    &_1 {
+      margin-bottom: 10px;
+    }
+    &_2 {
+      margin-bottom: 24px;
+    }
+  }
+  &r {
+    &_1 {
+      margin-right: 10px;
+    }
+  }
+  &l {
+    &_1 {
+      margin-left: 10px;
+    }
+  }
+}
+
+// Display
+.d {
+  &_b {
+    display: block;
+  }
+  &_ib {
+    display: inline-block;
+  }
+  &_f {
+    display: flex;
+  }
+  &_if {
+    display: inline-flex;
+  }
+}
