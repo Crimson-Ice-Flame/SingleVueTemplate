@@ -1,4 +1,5 @@
-import './assets/main.css'
+// import './assets/main.css'
+import '@/assets/scss/styles.scss';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -8,6 +9,7 @@ import router from './router'
 // ---↓ Plugin 引入 ↓---
 import naiveUI from 'naive-ui'
 import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 // ---↑ Plugin 引入 ↑---
 
 const app = createApp(App)

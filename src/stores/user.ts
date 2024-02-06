@@ -7,6 +7,13 @@ interface Auth {
   isLogin: boolean,
   toRoute: string,
   account: string,
+  permissions: permission[]
+}
+
+type permission = {
+  label: string,
+  name?: string,
+  children: permission[];
 }
 
 export const appAuthStore = defineStore('auth',{
@@ -15,7 +22,7 @@ export const appAuthStore = defineStore('auth',{
     isLogin: false,
     toRoute: '',
     account: '',
-    
+    permissions: []
   }),
   //對狀態加工的 getters，如同 computed
   getters: {
@@ -31,9 +38,13 @@ export const appAuthStore = defineStore('auth',{
       localStorage.removeItem('timestamp');
       localStorage.removeItem('account');
     },
-    LOGIN(data: any){
+    LOGIN(){
       this.isLogin = true;
       localStorage.setItem('account', this.isLogin);
+      this.permissions = [
+        {label: '導航A', name: 'board', children: []},
+        {label: '導航B', children: []}
+      ]
     // apiLogin(data).then(async res => {
     //   if (res.status === 1) {
     //     this.SET_TO_ROUTE('/dashboard/index'); // 保留 websocket 連接完成後要跳轉的頁面
@@ -79,11 +90,11 @@ export const appAuthStore = defineStore('auth',{
         }
   
         // 距離上次token刷新時間超過或等於25分鐘小於30分鐘
-        if (idleTime < 30 && idleTime >= 25) {
-          const refreshOK = await this.REFRESH_TOKEN();
-          if (!this.isLogin && refreshOK) {
-          }
-        }
+        // if (idleTime < 30 && idleTime >= 25) {
+        //   const refreshOK = await this.REFRESH_TOKEN();
+        //   if (!this.isLogin && refreshOK) {
+        //   }
+        // }
   
         // 距離上次token刷新時間小於25分鐘
         // if (idleTime < 25) {

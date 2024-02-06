@@ -6,6 +6,7 @@ import type { UserParam } from '@/models/api/login';
 import {appAuthStore} from '@/stores/user';
 import router from '@/router';
 import { apiLogin } from '@/apis/login';
+import type { FormInst, FormValidationError } from 'naive-ui';
 
 const authStore = appAuthStore();
 authStore.REMOVE_LOCAL_DATA();
@@ -56,7 +57,7 @@ const submitForm = (e: MouseEvent) => {
         //   }
         // })
         authStore.LOGIN();
-        router.push({ path: 'home' });
+        router.push({ path: 'dashboard' });
       }
     }
   )
