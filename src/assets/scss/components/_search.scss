@@ -1,0 +1,81 @@
+.searchBar {
+  .n-form-item-gi {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 16px;
+    .n-form-item-blank {
+      width: 140px;
+    }
+    &.large {
+      .n-form-item__content {
+        width: 200px;
+      }
+    }
+    &.form_datePicker {
+      .n-form-item__content {
+        width: 120px;
+      }
+    }
+    &.form_status {
+      .n-form-item__content {
+        width: 100px;
+      }
+    }
+    &.form_auto {
+      .n-form-item__content {
+        width: auto;
+      }
+    }
+  }
+  .form_plus {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 16px;
+  }
+  .n-button {
+    margin-bottom: 16px;
+  }
+  .n-form-item__label {
+    margin-right: 10px;
+    padding: 0;
+  }
+}
+
+// Table List 上方的 Form / 頁面上方橫排的 Form
+.top_form_wrapper {
+  margin-bottom: 0 !important;
+  .n-col {
+    flex: 1 1 auto;
+  }
+  .n-form-item {
+    margin-bottom: 16px;
+  }
+  .buttons {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    max-width: none;
+    button {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.hall_search {
+  margin-bottom: 24px;
+  .n-input--small .n-input__inner,
+  .n-select--small .n-input__inner {
+    --n-input-inner-height: 32px;
+  }
+  .n-input,
+  .n-select,
+  .n-button {
+    width: 100%;
+    min-width: initial;
+  }
+  .n-button {
+    display: flex;
+  }
+}

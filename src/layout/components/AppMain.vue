@@ -37,7 +37,7 @@ const wrap = (name: any, component: any) => {
   <div class="app_main">
     <el-scrollbar>
       <router-view v-slot="{ Component, route }" class="main_content">
-        <keep-alive :include="caches">
+        <keep-alive>
           <component :is="wrap(route.path, Component)" :key="key" />
         </keep-alive>
       </router-view>

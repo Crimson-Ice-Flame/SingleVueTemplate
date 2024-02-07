@@ -9,6 +9,10 @@ export const useInfoStore = defineStore('info', {
         version: '1.0.0'
     }),
     getters: {},
-    actions: {}
+    actions: {
+      CHANGE_LOADING( isOpen: boolean , delayInMillisecond: number, isRecordAPI: boolean) {
+        console.log(isOpen, delayInMillisecond, isRecordAPI);
+      }
+    }
   })
   

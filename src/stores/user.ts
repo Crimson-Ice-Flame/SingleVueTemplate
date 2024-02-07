@@ -40,7 +40,7 @@ export const appAuthStore = defineStore('auth',{
     },
     LOGIN(){
       this.isLogin = true;
-      localStorage.setItem('account', this.isLogin);
+      localStorage.setItem('isLogin', String(this.isLogin));
       this.permissions = [
         {label: '導航A', name: 'board', children: []},
         {label: '導航B', children: []}

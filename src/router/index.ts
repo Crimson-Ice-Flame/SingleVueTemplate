@@ -35,7 +35,8 @@ const router = createRouter({
           name: 'home'
         }
       ]
-    },{
+    },
+    {
       path: '/navigate',
       component: Layout,
       children: [
@@ -47,7 +48,21 @@ const router = createRouter({
           name: 'board',
         }
       ],
-    }, // 登入
+    }, 
+    {
+      path: '/permission',
+      component: Layout,
+      children: [
+        {
+          // 当 /user/:id/profile 匹配成功
+          // UserProfile 将被渲染到 User 的 <router-view> 内部
+          path: 'account',
+          component: () =>  import('@/views/accountManagement/accountManagement.vue'),
+          name: 'account',
+        }
+      ],
+    },
+    // 登入
     {
       path: '/',
       component: () => import('@/views/login/login.vue'),
@@ -79,8 +94,9 @@ router.beforeEach((to, from, next) => {
   const user = appAuthStore()
   console.log(user);
   console.log(localStorage.getItem('account'));
-  if(localStorage.getItem('account')) next();
-  if (to.name !== 'login' && !user.isLogin) next({ name: 'login' })
+  const isLogin = localStorage.getItem('isLogin');
+  // if(localStorage.getItem('account')) next();
+  if (to.name !== 'login' && isLogin === 'false') next({ name: 'login' })
   else next()
 })
 

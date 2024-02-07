@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, h } from 'vue'
+import { ref, computed, watch, onMounted, h, type Component } from 'vue'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import CommunityIcon from '@/components/icons/IconCommunity.vue'
@@ -22,7 +22,6 @@ function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-const collapsed = ref(true)
 const menuOptions: MenuOption[] = [
   {
     label: () =>
@@ -69,6 +68,19 @@ const menuOptions: MenuOption[] = [
         ]
       }
     ]
+  },{
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'account'
+          }
+        },
+        { default: () => '帳號管理' }
+      ),
+    key: 'go-back-account',
+    icon: renderIcon(CommunityIcon)
   }
 ]
 

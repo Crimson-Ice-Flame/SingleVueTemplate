@@ -65,7 +65,10 @@
 </template>
 
 <script setup name="layout" lang="ts">
+import { ref } from 'vue';
 import { Navbar, Sidebar, AppMain, Footer } from './components/index.js'
+
+const collapsed = ref(false);
 </script>
 <style scoped lang="scss">
 .light-green {
