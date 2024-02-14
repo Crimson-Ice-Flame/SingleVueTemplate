@@ -1,7 +1,8 @@
 import router from '@/router'
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
-import { apiLogin, apiRefreshToken } from '@/apis/login';
+import type { LoginRep } from '@/models/api/login';
+import { apiRefreshToken } from '@/apis/user';
 
 interface Auth {
   isLogin: boolean,
@@ -38,20 +39,15 @@ export const appAuthStore = defineStore('auth',{
       localStorage.removeItem('timestamp');
       localStorage.removeItem('account');
     },
-    LOGIN(){
+    LOGIN(rep :LoginRep){
+      // this.permissions = [
+      //   {label: '導航A', name: 'board', children: []},
+      //   {label: '導航B', children: []}
+      // ]
       this.isLogin = true;
-      localStorage.setItem('isLogin', String(this.isLogin));
-      this.permissions = [
-        {label: '導航A', name: 'board', children: []},
-        {label: '導航B', children: []}
-      ]
-    // apiLogin(data).then(async res => {
-    //   if (res.status === 1) {
-    //     this.SET_TO_ROUTE('/dashboard/index'); // 保留 websocket 連接完成後要跳轉的頁面
-    //     this.SAVE_TOKEN(res.result.access_token); // 儲存 Token
-    //     // dispatch('webSocket/INIT_WEBSOCKET', null, { root: true }); // 初始化 websocket
-    //   }
-    // });
+      this.SET_TO_ROUTE('/dashboard/index'); // 保留 websocket 連接完成後要跳轉的頁面
+      this.SAVE_TOKEN(rep.access_token); // 儲存 Token
+      // dispatch('webSocket/INIT_WEBSOCKET', null, { root: true }); // 初始化 websocket
     },
     LOGOUT() {
       this.REMOVE_LOCAL_DATA();

@@ -1,9 +1,9 @@
 <template>
   <div class="pagination_wrapper">
     <n-pagination
-      v-model:page="pageCurrent.pageNo"
-      v-model:page-size="pageCurrent.pageSize"
-      v-model:page-count="pageCurrent.pageTotal"
+      v-model:page="pageCurrent.page"
+      v-model:page-size="pageCurrent.page_size"
+      v-model:page-count="pageCurrent.total"
       show-size-picker
       :page-sizes="pageSizes ?? [10, 20, 30, 40, 50]"
       @update:page="handleCurrentChange"
@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import {computed } from 'vue';
-import { PageDataType } from '../../models/components/pagination';
+import { type PageDataType } from '../../models/components/pagination';
 
 const emits = defineEmits(['pageData:update','changePage', 'changeSize']);
 const props = defineProps<{

@@ -5,7 +5,20 @@ export interface Error {
 }
 
 export interface ResponseResult<T = any> extends Error {
+[x: string]: any;
   errors: Error[];
   result: T;
   status: number;
+}
+
+export interface ListData<T = any> {
+  page_data: T[];
+  page_info: PageInfo;
+}
+
+type PageInfo = {
+  current_page: number;
+  page_size: number;
+  page_count: number;
+  total: number;
 }

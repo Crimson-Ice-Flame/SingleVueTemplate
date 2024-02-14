@@ -55,7 +55,7 @@ const enabled = computed({
 });
 
 const title = computed(() => {
-  return props.dialogTitle || t('Disabled');
+  return props.dialogTitle || '停用';
 });
 
 //打開對話框

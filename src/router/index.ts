@@ -57,7 +57,7 @@ const router = createRouter({
           // 当 /user/:id/profile 匹配成功
           // UserProfile 将被渲染到 User 的 <router-view> 内部
           path: 'account',
-          component: () =>  import('@/views/accountManagement/accountManagement.vue'),
+          component: () =>  import('@/views/permissionManagement/accountManagement/accountManagement.vue'),
           name: 'account',
         }
       ],
@@ -91,12 +91,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const user = appAuthStore()
-  console.log(user);
-  console.log(localStorage.getItem('account'));
-  const isLogin = localStorage.getItem('isLogin');
-  // if(localStorage.getItem('account')) next();
-  if (to.name !== 'login' && isLogin === 'false') next({ name: 'login' })
+  const isLogin = localStorage.getItem('token')?.trim();
+  if (to.name !== 'login' && isLogin === undefined) next({ name: 'login' })
   else next()
 })
 

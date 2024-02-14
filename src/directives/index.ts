@@ -1,10 +1,10 @@
 import type { App } from 'vue';
 import debounce from './modules/debounce';
-import permission from './modules/permission';
+// import permission from './modules/permission';
 
 const directiveList: any = {
   debounce,
-  permission
+  // permission
 };
 
 const directives = {

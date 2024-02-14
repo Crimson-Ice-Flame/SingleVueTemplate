@@ -156,3 +156,9 @@ export const isEqual = (oldArray: any, newArray: any) => {
   const result: boolean = !_.isEqual(oldArray, newArray);
   return result;
 };
+
+
+// 我要一個Function，可以把泛型的物件裡面的屬性都給Null
+export function setNull<T extends Record<string, unknown>>(initialValue: T): T {
+  return Object.fromEntries(Object.keys(initialValue).map(key => [key, null])) as T;
+}

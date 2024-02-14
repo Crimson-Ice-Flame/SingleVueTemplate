@@ -32,37 +32,6 @@ export const DateOfApplication = (rule: any, value: any, callback: any) => {
 };
 
 /**
- * 時間的比較
- * @param {String} time1 - 帶入時間字串，規格為 HH:mm:ss
- * @param {String} time2 - 帶入被比較的時間字串，規格為 HH:mm:ss
- * @param {Number} time1_order - (選填) 時間的 order，1:前一日 2:當日 3:次日 (預設為2)
- * @param {Number} time2_order - (選填) 被比較時間的 order，1:前一日 2:當日 3:次日 (預設為2)
- * @param {Boolean} canBeEqual -(選填) 兩個時間是否可以相等 (預設為false)
- * @returns {Boolean} true: 時間大於被比較的時間，或是時間可以相等且兩時間相等時 | false: 時間小於被比較的時間
- */
-export const greaterThenTime = (
-  time1: string,
-  time2: string,
-  time1_order: number | null = 2,
-  time2_order: number | null = 2,
-  canBeEqual: boolean = false
-): boolean => {
-  const _time1_order = time1_order ?? 2;
-  const _time2_order = time2_order ?? 2;
-
-  const date1 = dayjs(`2022-10-0${_time1_order} ${time1}`);
-  const date2 = dayjs(`2022-10-0${_time2_order} ${time2}`);
-
-  if (canBeEqual && dayjs(date1).isSameOrAfter(date2)) {
-    return true;
-  } else if (dayjs(date1).isAfter(date2)) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-/**
  * 檢核日期時間的區間
  * @param {String} startDate - 日期開始
  * @param {String} endDate - 日期結束
@@ -280,12 +249,8 @@ export const dateDisabled = (
 ) => {
   // 判斷是不是Timestamp，不是的話需要轉檔
   const date = new Date(number).getTime() / 1000;
-  const startDate = dayjs(dateRange.start, dayjs.ISO_8601, true).isValid()
-    ? dayjs(dateRange.start, 'YYYY-MM-DD').valueOf() / 1000
-    : dateRange.start;
-  const endDate = dayjs(dateRange.end, dayjs.ISO_8601, true).isValid()
-    ? dayjs(dateRange.end, 'YYYY-MM-DD').valueOf() / 1000
-    : dateRange.end;
+  const startDate =  dateRange.start;
+  const endDate = dateRange.end;
   if (startDate && endDate) {
     return selectToday ? date > endDate || date < startDate : date >= endDate || date <= startDate;
   } else if (!startDate && endDate) {

@@ -1,12 +1,12 @@
-<script setup name="login" lang="ts">
+<script setup lang="ts">
 import { reactive, ref } from 'vue';
 import type { UserParam } from '@/models/api/login';
+import router from '@/router';
 //驗證
 
 import {appAuthStore} from '@/stores/user';
-import router from '@/router';
-import { apiLogin } from '@/apis/login';
 import type { FormInst, FormRules, FormValidationError } from 'naive-ui';
+import { apiLogin } from '@/apis/user'; // Import the apiLogin function
 
 const authStore = appAuthStore();
 authStore.REMOVE_LOCAL_DATA();
@@ -48,16 +48,15 @@ const submitForm = (e: MouseEvent) => {
           account: loginFormModel.account,
           password: loginFormModel.password
         }
-        // apiLogin(query).then(res=>{
-        //   if(res.status === 1){
-        //     authStore.$patch({account: loginFormModel.account})
-        //     localStorage.setItem('account', loginFormModel.account);
-        //     localStorage.setItem('token', res.result.access_token);
-        //     router.push({ path: '/dashboard' });
-        //   }
-        // })
-        authStore.LOGIN();
-        router.push({ path: 'dashboard' });
+       
+
+        apiLogin(query).then(res=>{
+          if(res.status === 1){
+            authStore.$state.account =  loginFormModel.account;
+            authStore.LOGIN(res.result);
+            router.push({ path: '/dashboard/index' });
+          }
+        })
       }
     }
   )

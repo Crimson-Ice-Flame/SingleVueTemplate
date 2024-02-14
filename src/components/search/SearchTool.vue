@@ -1,5 +1,5 @@
 <template>
-  <div class="searchBar">
+  <div class="label_width_auto searchBar">
     <n-grid :cols="props.searchList.length +1" :x-gap="24" >
       <template v-for="(item, key) in props.searchList" :key="key">
         <n-form-item-gi v-if="item.elementName === 'nSelect'" label-placement="left" :class="item.class ?? ''">
@@ -13,6 +13,7 @@
             :multiple="item.multiple"
             :label-field="item.option_label"
             :value-field="item.option_value"
+            :placeholder="item.placeholder ?? '請選擇'"
             @update:value="item.changeEvent ? item.changeEvent : null"
           />
         </n-form-item-gi>

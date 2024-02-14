@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { TableField } from '@/type/components/table';
+import type { TableField } from '@/models/components/viewTable';
 
 defineProps<{
   haveIndexColumn: boolean;
