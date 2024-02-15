@@ -8,15 +8,16 @@ import App from './App.vue'
 import router from './router'
 // ---↓ Plugin 引入 ↓---
 import naiveUI from 'naive-ui'
-import ElementPlus from 'element-plus';
+// import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 // ---↑ Plugin 引入 ↑---
+import '@/assets/icomoon/style.css';
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 app.use(naiveUI)
-app.use(ElementPlus)
+// app.use(ElementPlus)
 
 app.mount('#app')

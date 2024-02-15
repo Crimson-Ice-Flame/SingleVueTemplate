@@ -6,7 +6,7 @@ import router from '@/router';
 
 import {appAuthStore} from '@/stores/user';
 import type { FormInst, FormRules, FormValidationError } from 'naive-ui';
-import { apiLogin } from '@/apis/user'; // Import the apiLogin function
+import { apiLogin } from '@/apis/login'; // Import the apiLogin function
 
 const authStore = appAuthStore();
 authStore.REMOVE_LOCAL_DATA();

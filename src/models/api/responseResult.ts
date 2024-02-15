@@ -16,6 +16,11 @@ export interface ListData<T = any> {
   page_info: PageInfo;
 }
 
+export interface PaginationOptions {
+  page_size: number;
+  page: number;
+}
+
 type PageInfo = {
   current_page: number;
   page_size: number;

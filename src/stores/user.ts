@@ -2,7 +2,7 @@ import router from '@/router'
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import type { LoginRep } from '@/models/api/login';
-import { apiRefreshToken } from '@/apis/user';
+import { apiRefreshToken } from '@/apis/login';
 
 interface Auth {
   isLogin: boolean,

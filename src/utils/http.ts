@@ -47,7 +47,6 @@ const successErrorsHandler = (errors: any) => {
     true
   );
 };
-console.log('object, import.meta.env.VITE_API_URL', import.meta.env.VITE_API_URL);
 const axios = Axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 20000,
@@ -61,7 +60,6 @@ axios.interceptors.request.use(
       Authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json;charset=utf-8'
     };
-    console.log('axios',axios);
     // 當畫面為 loading 時，儲存 api 路徑
     // if (loadStore.isLoading && config.url && loadingPath === null) {
     //   loadingPath = config.url;

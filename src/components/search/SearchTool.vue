@@ -9,6 +9,7 @@
           <n-select
             v-model:value="searchData[item.name]"
             max-tag-count="responsive"
+            clearable
             :options="item.selectOptions"
             :multiple="item.multiple"
             :label-field="item.option_label"

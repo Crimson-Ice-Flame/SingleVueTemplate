@@ -23,50 +23,53 @@
         {{ value.row.account }}
       </template>
       <template #enabled="value">
-        <!-- <Switch
-          v-permission="`${permissionTarget}:EDIT`"
-          v-model:enabled="value.row.enabled"
-          class="green"
-          :id="value.row.id"
-          :api="switchApi"
-        ></Switch> -->
+        <n-switch v-model:value="value.row.enabled" @update:value="handleSwitchChange($event, value.row.id)" />
       </template>
       <template #operator="value">
-        <div>
-          <n-button class="btn_sure mr_1" @click="toReset(value.row)">密碼重置</n-button>
-          <button class="btn_operator text_edit">
-            <DeleteIcon />
-          </button>
-          <button class="btn_operator text_delete">
-            <DeleteIcon />
-          </button>
-        </div>
+        <n-button class="btn_sure mr_1" @click="showResetForm(value.row)">密碼重置</n-button>
+        <button class="btn_operator text_edit" @click="toEdit(value.row.id)">
+          <span class="icon-6"></span>
+        </button>
+        <n-popconfirm
+          positive-text="確認刪除"
+          negative-text="取消"
+          @positive-click="handlePositiveClick(value.row.id)"
+        >
+          <template #trigger>
+            <button class="btn_operator text_delete">
+              <i class="icon-33"></i>
+            </button>
+          </template>
+          請問是否刪除此{{ value.row.account }}帳號？
+        </n-popconfirm>
       </template>
     </ViewTable>
     <PaginationVue :pageData="pageData" @changeSize="changeSize" @changePage="changePage" />
     <n-modal
-      v-model:show="showAddDialog"
-      title="新增帳號"
+      v-model:show="showAccountFormDialog"
+      :title="accountFormDialogTitle"
       preset="card"
       class="custom_card"
       :style="bodyStyle"
     >
-      <n-form ref="formRef" :model="accountFormModel" :rules="accountFormRules">
+      <n-form ref="accountFormRef" :model="accountFormModel" :rules="accountFormRules">
+        <n-form-item path="account" label="設定帳號">
+          <n-input v-model:value="accountFormModel.account" type="text" placeholder="" :disabled="accountFormDialogTitle === '編輯帳號'" />
+        </n-form-item>
         <n-form-item path="nickname" label="帳號暱稱">
           <n-input v-model:value="accountFormModel.nickname" type="text" placeholder="" />
         </n-form-item>
-        <n-form-item path="account" label="帳號名稱">
-          <n-input v-model:value="accountFormModel.account" type="text" placeholder="" />
-        </n-form-item>
-        <n-form-item path="password" label="權限群組">
+        <n-form-item path="permission_group_id_list" label="權限群組">
           <n-select
             v-model:value="accountFormModel.permission_group_id_list"
             placeholder=""
             multiple
             max-tag-count="responsive"
+            clearable
             :options="permissionOptions"
           />
         </n-form-item>
+        <template v-if="isAccountFormAdd">
         <n-form-item path="password" label="設定密碼">
           <n-input
             v-model:value="accountFormModel.password"
@@ -86,23 +89,25 @@
             :maxlength="24"
           />
         </n-form-item>
+      </template>
       </n-form>
       <template #footer>
         <n-space justify="center">
-          <n-button class="btn_cancel" @click="showAddDialog = false">取消</n-button>
-          <n-button class="btn_sure">送出</n-button>
+          <n-button class="btn_cancel" @click="showAccountFormDialog = false">取消</n-button>
+          <n-button class="btn_sure" v-show="isAccountFormAdd" @click="toCreateAccount">送出</n-button>
+          <n-button class="btn_sure" v-show="!isAccountFormAdd" @click="toEditAccount">送出</n-button>
         </n-space>
       </template>
     </n-modal>
     <n-modal
       v-model:show="showResetDialog"
-      title="新增帳號"
+      title="重置密碼"
       preset="card"
       class="custom_card"
       :style="bodyStyle"
     >
-      <n-form ref="formRef" :model="resetFormModel" :rules="resetFormRules">
-        <n-form-item path="nickname" label="帳號">
+      <n-form ref="resetFormRef" :model="resetFormModel" :rules="resetFormRules">
+        <n-form-item path="account" label="帳號">
           <n-input v-model:value="resetFormModel.account" type="text" disabled />
         </n-form-item>
 
@@ -129,7 +134,7 @@
       <template #footer>
         <n-space justify="center">
           <n-button class="btn_cancel" @click="showResetDialog = false">取消</n-button>
-          <n-button class="btn_sure">送出</n-button>
+          <n-button class="btn_sure" @click="toResetPw">送出</n-button>
         </n-space>
       </template>
     </n-modal>
@@ -137,61 +142,46 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive } from 'vue'
-// import { useStore } from '@/store';
-import { useRouter, useRoute } from 'vue-router'
-// import { useI18n } from 'vue-i18n';
-
 import _ from 'lodash'
-import DeleteIcon from '@/components/icons/IconDelete.vue'
-
 import ViewTable from '@/components/tables/ViewTable.vue'
 import SearchTool from '@/components/search/SearchTool.vue'
-import Switch from '@/components/switch/SwitchTool.vue'
 import DateTime from '@/components/DateTime/DateTime.vue'
 import PaginationVue from '@/components/pagination/PaginationTool.vue'
 
-// import IconDialog from '@/components/Dialogs/IconDialog.vue';
-// import OrgDialogVue from '@/components/Dialogs/OrgDialog.vue';
-// import FormValidVue from '@/components/Form/FormValid.vue';
-
 // Utils
-// import type { AddUser, EditUser, ResetPwUser } from '@/type/apis/user';
+import { setNull, showNotification } from '@/utils/common'
+
+// Apis
+import {
+  apiGetUserList,
+  apiAddUserAccount,
+  apiUpdateUserAccount ,
+  apiDeleteUserAccount,
+  apiResetUserAccount,
+  apiGetUserAccount,
+  apiEnableUserAccount
+} from '@/apis/user'
+
+// Types
+import type {  FormInst, FormRules, FormValidationError } from 'naive-ui'
 import type { SearchToolProps } from '@/models/components/searchTool'
 import type { TableField } from '@/models/components/viewTable'
 import { type PageDataType } from '@/models/components/pagination'
+import type { UserCreateModel, UserCreateReq, UserListReq, UserResetPwModel, UserResetPwReq, UserUpdateReq } from '@/models/api/user'
 
-// import { apiGetUserPermissionsGroup } from '@/api/permissions';
-import {
-  // apiUserAdd,
-  apiGetUserList
-  // apiUserEnable,
-  // apiUserResetVerify,
-  // apiUserDelete,
-  // apiUserResetPassword,
-  // apiUserUpdate,
-  // apiUserCheckDelete
-} from '@/apis/user'
-import { setNull, showNotification } from '@/utils/common'
-import type { FormItemRule, FormRules } from 'naive-ui'
 // import { getPermissionID } from '@/utils/permission';
 
 const permissionTarget = 'Account_Management'
-
-// const store = useStore();
-// const { t } = useI18n();
 const route = useRoute()
 const router = useRouter()
-// const switchApi = ref(apiUserEnable);
-
 const twiceOptions: any = [
-  { label: 'Enable', value: 1 },
-  { label: 'Disabled', value: 0 }
+  { label: '啟用', value: 1 },
+  { label: '停用', value: 0 }
 ]
 const searchList = ref<SearchToolProps[]>([
   {
     elementName: 'nInput',
-    name: 'group_name',
+    name: 'group_id',
     label: '權限群組'
   },
   {
@@ -209,8 +199,8 @@ const searchList = ref<SearchToolProps[]>([
     class: 'form_status'
   }
 ])
-const searchData = ref({
-  group_name: null,
+const searchData = ref<UserListReq>({
+  group_id: null,
   account: null,
   enabled: null
 })
@@ -220,14 +210,13 @@ const onSearch = (value: any) => {
 }
 
 const getList = () => {
-  const query = {
+  const query: UserListReq = {
     ...searchData.value,
     page_size: pageData.page_size,
     page: pageData.page
   }
   apiGetUserList(query).then((res) => {
     if (res.status === 1) {
-      console.log(res)
       tableData.value = res.result.page_data
       pageData.total = res.result.page_info.total
     }
@@ -238,7 +227,7 @@ const tableList = ref<TableField[]>([
   { label: '帳號', name: 'account', sortable: true },
   { label: '暱稱', name: 'nickname' },
   { label: '權限群組', name: 'group_name', sortable: true },
-  { label: '更新時間', name: 'updated_at' },
+  { label: '更新時間', name: 'updated_at', elementName: 'slot' },
   { label: '啟用狀態', name: 'enabled', elementName: 'slot', width: 95 },
   { label: '操作', name: 'operator', elementName: 'slot', width: 320 }
 ])
@@ -247,7 +236,7 @@ const tableData = ref<any>([])
 let pageData = reactive<PageDataType>({
   page_size: 10,
   page: 1,
-  total: 100
+  total: 10
 })
 const changeSize = (val: number) => {
   pageData.page_size = val
@@ -260,26 +249,40 @@ const changePage = (val: number) => {
 }
 
 // 新增帳號
-const showAddDialog = ref<Boolean>(false)
+const showAccountFormDialog = ref<Boolean>(false)
+const accountFormRef = ref<FormInst | null>(null)
 const bodyStyle = {
-  width: '600px'
+  width: '450px'
 }
+
+const accountFormDialogTitle = computed(() => {
+  return isAccountFormAdd.value ? '新增帳號' : '編輯帳號'
+})
+const isAccountFormAdd = ref<Boolean>(true);
 const toAdd = () => {
-  showAddDialog.value = true
+  isAccountFormAdd.value = true;
+  showAccountFormDialog.value = true
   accountFormModel.value = setNull(accountFormModel.value)
 }
-const permissionOptions = ref<any[]>([])
-const accountFormModel = ref({
+const permissionOptions = ref([
+  {
+    value: 1,
+    label: 'MasterGroup'
+  }
+])
+const accountFormModel = ref<UserCreateModel>({
   account: '',
   nickname: '',
-  permission_group_id_list: [],
-  password: '',
-  reenteredPassword: ''
+  permission_group_id_list: null
 })
 
+function isPasswordValid(rule: any, value: string): boolean {
+  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  return passwordRegExp.test(value) && value.length >= 8 && value.length <= 16;
+}
+
 function validatePasswordStartWith(rule: any, value: string): boolean {
-  console.log(rule)
-  let compareModel = rule.field === 'reenteredPassword' ? accountFormModel.value : resetFormModel;
+  let compareModel = rule.field === 'reenteredPassword' ? accountFormModel.value : resetFormModel
 
   return (
     !!compareModel.password &&
@@ -288,7 +291,7 @@ function validatePasswordStartWith(rule: any, value: string): boolean {
   )
 }
 function validatePasswordSame(rule: any, value: string): boolean {
-  let compareModel = rule.field === 'reenteredPassword' ? accountFormModel.value : resetFormModel;
+  let compareModel = rule.field === 'reenteredPassword' ? accountFormModel.value : resetFormModel
   return value === compareModel.password
 }
 
@@ -307,11 +310,24 @@ const accountFormRules: FormRules = {
       message: '請輸入帳號暱稱'
     }
   ],
+  permission_group_id_list: [
+    {
+      type: 'array',
+      required: true,
+      trigger: ['blur', 'change'],
+      message: '請選擇權限群組'
+    }
+  ],
   password: [
     {
       required: true,
       trigger: ['input'],
       message: '請輸入密碼'
+    },
+    {
+      validator: isPasswordValid,
+      message: '需英數字混合，且要大小寫各一個，至少8-16個字元',
+      trigger: 'input'
     }
   ],
   reenteredPassword: [
@@ -322,7 +338,7 @@ const accountFormRules: FormRules = {
     },
     {
       validator: validatePasswordStartWith,
-      message: '兩次密碼輸入不一致',
+      message: '兩次密碼長度輸入不一致',
       trigger: 'input'
     },
     {
@@ -333,13 +349,73 @@ const accountFormRules: FormRules = {
   ]
 }
 
+const toEdit = async (id: number) => {
+  isAccountFormAdd.value = false;
+  const rep = await apiGetUserAccount(id)
+  if (rep.status === 1) {
+    accountFormModel.value.id = rep.result.id;
+    accountFormModel.value.account = rep.result.account;
+    accountFormModel.value.nickname = rep.result.nickname;
+    accountFormModel.value.permission_group_id_list = rep.result.permission_group_id_list;
+    showAccountFormDialog.value = true
+  }
+}
+
+const toCreateAccount = () => {
+  accountFormRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
+    if (!errors) {
+      const query: UserCreateReq = {
+        account: accountFormModel.value.account,
+        nickname: accountFormModel.value.nickname,
+        password: accountFormModel.value.password!,
+        permission_group_id_list: accountFormModel.value.permission_group_id_list!
+      }
+      apiAddUserAccount(query).then((res) => {
+        if (res.status === 1) {
+          showAccountFormDialog.value = false
+          getList()
+          showNotification('success', '新增成功', 'success')
+        }
+      })
+    }
+  })
+}
+
+const toEditAccount = () => {
+  accountFormRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
+    if (!errors) {
+      const query :UserUpdateReq= {
+        id: accountFormModel.value.id,
+        auth_group: accountFormModel.value.permission_group_id_list!
+      }
+      apiUpdateUserAccount(query).then((res) => {
+        if (res.status === 1) {
+          showAccountFormDialog.value = false
+          getList()
+          showNotification('success', '更新成功', 'success')
+        }
+      })
+    }
+  })
+}
+
+const handlePositiveClick = (id: number) => {
+  apiDeleteUserAccount(id).then((res) => {
+    if (res.status === 1) {
+      getList()
+      showNotification('success', '刪除成功', 'success')
+    }
+  })
+}
+
 // 重製密碼
 const showResetDialog = ref<Boolean>(false)
-const resetFormModel = reactive({
-  id: 0,
-  account: '',
-  password: '',
-  changePassword: ''
+const resetFormRef = ref<FormInst | null>(null)
+const resetFormModel = reactive<UserResetPwModel>({
+  id: null,
+  account: null,
+  password: null,
+  changePassword: null
 })
 const resetFormRules: FormRules = {
   password: [
@@ -347,6 +423,11 @@ const resetFormRules: FormRules = {
       required: true,
       trigger: ['input'],
       message: '請輸入密碼'
+    },
+    {
+      validator: isPasswordValid,
+      message: '需英數字混合，且要大小寫各一個，至少8-16個字元',
+      trigger: 'input'
     }
   ],
   changePassword: [
@@ -357,7 +438,7 @@ const resetFormRules: FormRules = {
     },
     {
       validator: validatePasswordStartWith,
-      message: '兩次密碼輸入不一致',
+      message: '兩次密碼長度輸入不一致',
       trigger: 'input'
     },
     {
@@ -368,11 +449,41 @@ const resetFormRules: FormRules = {
   ]
 }
 
-const toReset = (rowData: any) => {
+const handleSwitchChange = (value: boolean, id: number) =>{
+  apiEnableUserAccount(id).then((res) => {
+    if (res.status === 1) {
+      const switchMessage = value ? '啟用成功' : '停用成功';
+      showNotification('success', switchMessage, 'success')
+    }
+  })
+}
+
+const showResetForm = (rowData: any) => {
   resetFormModel.id = rowData.id
   resetFormModel.account = rowData.account
-  console.log(resetFormModel)
-
+  resetFormModel.password = null
+  resetFormModel.changePassword = null
   showResetDialog.value = true
 }
+
+const toResetPw = () => {
+  resetFormRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
+    if (!errors) {
+  const query: UserResetPwReq = {
+    id: resetFormModel.id!,
+    password: resetFormModel.password!
+  }
+  apiResetUserAccount(query).then((res) => {
+    if (res.status === 1) {
+      showNotification('success', '重置成功', 'success')
+    }
+  })
+
+}
+  })
+}
+
+onMounted(() => {
+  getList()
+})
 </script>
