@@ -5,19 +5,28 @@ interface PermissionStateTypes {
     userPermissionMap: any;
 }
 
+const actionPermissionMap = new Map([
+    ["PermissionAccessType_Add", "ADD"],
+    ["PermissionAccessType_Delete", "DELETE"],
+    ["PermissionAccessType_Edit", "EDIT"],
+    ['PermissionAccessType_View', 'VIEW'],
+  ]);
+
 // 展開權限 Map
 function flatPermissions(userPermissions: any, permissionMap: any) {
     permissionMap.forEach((item: any) => {
         const target = item.target;
         const permissions: { [key: string]: any } = {}; // Add type annotation for permissions object
 
-        Object.entries(item.permissions).forEach((item: any) => {
-            permissions[item[0]] = item[1].menu_permissions_id;
+        item.permissions.forEach((element: { access_type: string; menu_permission_id: number; }) => {
+            const name = actionPermissionMap.get(element.access_type);
+            if (name)
+                permissions[name] = element.menu_permission_id;
         });
         userPermissions[target] = permissions;
 
-        if (item.sub_menus && item.sub_menus.length > 0) {
-            flatPermissions(userPermissions, item.sub_menus);
+        if (item.sub_menu_list && item.sub_menu_list.length > 0) {
+            flatPermissions(userPermissions, item.sub_menu_list);
         }
     });
 }

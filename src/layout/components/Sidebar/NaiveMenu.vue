@@ -14,10 +14,10 @@ import CommunityIcon from '@/components/icons/IconCommunity.vue'
 import SupportIcon from '@/components/icons/IconSupport.vue'
 import { NIcon } from 'naive-ui'
 
-import { appAuthStore } from '@/stores/user'
-import { apiGetUserPermission } from '@/apis/permission'
+import { usePermissionStore } from '@/stores/permission'
+import { filterPermissionRouters } from '@/router'
 
-const authStore = appAuthStore()
+const permissionStore = usePermissionStore()
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -75,11 +75,17 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
 }
 
 const loadUserPermission = () => {
-  apiGetUserPermission().then((res) => {
-    if (res.status === 1) {
-      menuOptions.value = defaultPermission.concat(res.result)
-    }
-  })
+  permissionStore.getUserPermission().then(()=>{
+    console.log(permissionStore.userPermissionMap);
+    console.log(permissionStore.userPermissions);
+    // console.log(filterPermissionRouters(protectedRoutes, permissionStore.userPermissions));
+    menuOptions.value = defaultPermission;
+  });
+  // apiGetUserPermission().then((res) => {
+  //   if (res.status === 1) {
+  //     menuOptions.value = defaultPermission.concat(res.result)
+  //   }
+  // })
 }
 
 onMounted(() => {

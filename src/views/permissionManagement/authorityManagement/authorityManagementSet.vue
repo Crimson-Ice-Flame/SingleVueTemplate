@@ -632,8 +632,7 @@ const getList = async () => {
     await apiGetPermissions(orgGroupId).then(res => {
       if (res.result) {
         orgGroupForm.groupName = res.result.name;
-
-        menuPermissionsData.value = res.result.menu_permissions_data;
+        menuPermissionsData.value = res.result.menu_permission_data_list;
       }
     });
   }

@@ -1,8 +1,8 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteLocationNormalized, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { appAuthStore } from '@/stores/user';
 
-const routes =  [
+export const routes =  [
   {
     path: '/about',
     name: 'about',
@@ -94,6 +94,70 @@ const routes =  [
     name: 'catchAll'
   }
 ];
+
+export type AddRouteRecordRaw = RouteRecordRaw & {
+  children?: any;
+};
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    title: string;
+    icon?: string;
+    requiresAuth: boolean;
+    requiresPermission?: { key: string; fns?: string[] };
+    hidden?: boolean;
+  }
+}
+
+/** 篩選有權限的路由 */
+export function filterPermissionRouters(
+  routers: AddRouteRecordRaw[],
+  permissions: any
+): AddRouteRecordRaw[] {
+  const result: AddRouteRecordRaw[] = [];
+  routers.forEach(route => {
+    const newRoute = Object.assign({}, route);
+    if (havePermission(newRoute, permissions)) {
+      result.push(newRoute);
+      if (newRoute.children && newRoute.children.length) {
+        newRoute.children = filterPermissionRouters(newRoute.children, permissions);
+      }
+    }
+  });
+  return result;
+}
+
+/** 判斷是否擁有路由的權限 */
+function havePermission(
+  route: AddRouteRecordRaw | RouteLocationNormalized,
+  permissions: any
+): boolean {
+  let flag = true;
+
+  if (route.meta && route.meta.requiresPermission) {
+    const key = route.meta.requiresPermission.key;
+    const fns = route.meta.requiresPermission.fns;
+
+    // 除了要判斷是否有檢視權限，如果該頁為功能頁面，還要判斷是否有功能的權限
+    // 功能指的是 ['ADD', 'EDIT', 'DELETE']
+    if (permissions[key]?.VIEW !== undefined) {
+      if (fns !== undefined) {
+        for (const fn of fns) {
+          if (Object.keys(permissions[key]).includes(fn)) {
+            flag = true;
+            break;
+          }
+        }
+      } else {
+        flag = true;
+      }
+    } else {
+      flag = false;
+    }
+  }
+
+  return flag;
+}
 // Layout
 import Layout from '@/layout/layoutDashboard.vue';
 const router = createRouter({

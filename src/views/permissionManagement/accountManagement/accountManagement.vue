@@ -265,6 +265,10 @@ const permissionOptions = ref([
   {
     value: 1,
     label: 'MasterGroup'
+  },
+  {
+    value: 4,
+    label: 'MasterGroup2'
   }
 ])
 const accountFormModel = ref<UserCreateModel>({
@@ -383,6 +387,7 @@ const toEditAccount = () => {
     if (!errors) {
       const query :UserUpdateReq= {
         id: accountFormModel.value.id,
+        nickname: accountFormModel.value.nickname,
         auth_group: accountFormModel.value.permission_group_id_list!
       }
       apiUpdateUserAccount(query).then((res) => {

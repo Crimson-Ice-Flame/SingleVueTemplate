@@ -30,6 +30,7 @@ import type { ListData, PaginationOptions } from "./responseResult";
 
   export interface UserUpdateReq {
     id?: number;
+    nickname: string;
     auth_group: number[]
   }
 
