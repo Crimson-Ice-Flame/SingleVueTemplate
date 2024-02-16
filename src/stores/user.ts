@@ -7,7 +7,7 @@ import { apiRefreshToken } from '@/apis/login';
 interface Auth {
   isLogin: boolean,
   toRoute: string,
-  account: string,
+  account: string | null,
   permissions: permission[]
 }
 
@@ -22,12 +22,14 @@ export const appAuthStore = defineStore('auth',{
   state: ():Auth => ({ 
     isLogin: false,
     toRoute: '',
-    account: '',
+    account: null,
     permissions: []
   }),
   //對狀態加工的 getters，如同 computed
   getters: {
-    
+    getUserAccount(): string {
+      return this.account || localStorage.getItem('account') || '';
+    },
   },
   //定義使用到的函式，可以為同步和非同步，如同 method
   actions: {

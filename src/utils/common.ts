@@ -162,3 +162,14 @@ export const isEqual = (oldArray: any, newArray: any) => {
 export function setNull<T extends Record<string, unknown>>(initialValue: T): T {
   return Object.fromEntries(Object.keys(initialValue).map(key => [key, null])) as T;
 }
+
+// 通用SelectOptions
+type SelectOption = {
+  label: string
+  value: number
+}
+
+export const EnableOptions: SelectOption[] = [
+  { label: '啟用', value: 1 },
+  { label: '停用', value: 0 }
+]

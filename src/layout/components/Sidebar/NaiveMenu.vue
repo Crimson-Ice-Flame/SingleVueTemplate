@@ -51,6 +51,20 @@ const defaultPermission = [
         ),
       key: 'go-back-account',
       icon: renderIcon(CommunityIcon)
+    },
+    {
+      label: () =>
+        h(
+          RouterLink,
+          {
+            to: {
+              name: 'authority'
+            }
+          },
+          { default: () => '權限管理' }
+        ),
+      key: 'go-back-authority',
+      icon: renderIcon(CommunityIcon)
     }
 ]
 const menuOptions = ref<MenuOption[]>([])

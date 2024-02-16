@@ -5,10 +5,10 @@
         裝置設定
       </n-button> -->
           <el-dropdown class="user_dropdown">
-            <a class="user_dropdown_link">{{ userAccount.charAt(0) }}</a>
+            <a class="user_dropdown_link">{{ authStore.getUserAccount.charAt(0) }}</a>
             <template #dropdown>
               <el-dropdown-menu class="user_dropdown_menu">
-                <li class="user_account">{{ userAccount }}</li>
+                <li class="user_account">{{ authStore.getUserAccount }}</li>
                 <el-dropdown-item @click="logOut">登出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -18,7 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import {  computed } from 'vue';
 // import { useRouter } from 'vue-router';
 import { ElDropdown,ElDropdownMenu,ElDropdownItem } from 'element-plus'
 // Types
@@ -26,13 +25,6 @@ import { appAuthStore } from '@/stores/user';
 // const router = useRouter();
 
 const authStore = appAuthStore();
-
-const userAccount = computed(() => {
-  if(authStore.account.trim() === '') {
-    return localStorage.getItem('account') || 'Account';
-  }
-  return authStore.account
-});
 
 const logOut = () => {
   authStore.LOGOUT();

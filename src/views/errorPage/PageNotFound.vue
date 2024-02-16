@@ -21,7 +21,7 @@
 import router from '@/router';
 
 const goBack = () => {
-  router.push('/');
+  router.push('/dashboard');
 };
 </script>
 

@@ -53,6 +53,7 @@ const submitForm = (e: MouseEvent) => {
         apiLogin(query).then(res=>{
           if(res.status === 1){
             authStore.$state.account =  loginFormModel.account;
+            localStorage.setItem('account',loginFormModel.account);
             authStore.LOGIN(res.result);
             router.push({ path: '/dashboard/index' });
           }

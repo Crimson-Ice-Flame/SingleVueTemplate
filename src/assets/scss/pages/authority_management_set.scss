@@ -1,0 +1,118 @@
+.board_inner {
+  max-width: 1000px;
+}
+
+.top_form {
+  .btn_allowAll {
+    margin-bottom: 24px;
+    background-color: #FFFFFF;
+    border: 1px solid #6658dd;
+    color: #6658dd;
+    &:hover,
+    &:focus {
+      background-color: lighten(#6658dd, 25%);
+    }
+  }
+}
+
+.tree_node {
+  display: flex;
+  min-height: 40px;
+  border-top: #CED4DA 1px solid;
+  &__label {
+    flex: 0 0 30%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 300px;
+  }
+  &__controls {
+    flex: 1 1 auto;
+    display: flex;
+  }
+  &__check {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    box-sizing: border-box;
+    border-left: #CED4DA 1px solid;
+    text-align: center;
+  }
+  &__label,
+  &__check {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
+
+.tree_head {
+  border-radius: 4px 4px 0 0;
+  background-color: #6658dd;
+  color: #FFFFFF;
+  font-size: 16px;
+  .tree_node {
+    border-top: none;
+  }
+}
+
+.tree_body {
+  border-radius: 0 0 4px 4px;
+  border: #CED4DA 1px solid;
+  border-top: none;
+  overflow: hidden;
+  .el-tree {
+    > .el-tree-node {
+      > .el-tree-node__children {
+        > .el-tree-node {
+          > .el-tree-node__content {
+            .tree_node__label {
+              padding-left: 24px;
+            }
+          }
+          > .el-tree-node__children {
+            > .el-tree-node {
+              > .el-tree-node__content {
+                .tree_node__label {
+                  padding-left: 38px;
+                }
+              }
+              > .el-tree-node__children {
+                > .el-tree-node {
+                  > .el-tree-node__content {
+                    .tree_node__label {
+                      padding-left: 52px;
+                    }
+                  }
+                  > .el-tree-node__children {
+                    > .el-tree-node {
+                      > .el-tree-node__content {
+                        .tree_node__label {
+                          padding-left: 66px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .tree_node__label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .arrow {
+        font-size: 12px;
+        transform: scale(0.6, 0.6);
+        transition: transform 0.3s ease-in-out;
+        &.expanded {
+          transform: scale(0.6, 0.6) rotate(180deg);
+        }
+      }
+    }
+  }
+}

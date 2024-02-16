@@ -149,7 +149,7 @@ import DateTime from '@/components/DateTime/DateTime.vue'
 import PaginationVue from '@/components/pagination/PaginationTool.vue'
 
 // Utils
-import { setNull, showNotification } from '@/utils/common'
+import { setNull, showNotification,EnableOptions } from '@/utils/common'
 
 // Apis
 import {
@@ -174,10 +174,7 @@ import type { UserCreateModel, UserCreateReq, UserListReq, UserResetPwModel, Use
 const permissionTarget = 'Account_Management'
 const route = useRoute()
 const router = useRouter()
-const twiceOptions: any = [
-  { label: '啟用', value: 1 },
-  { label: '停用', value: 0 }
-]
+
 const searchList = ref<SearchToolProps[]>([
   {
     elementName: 'nInput',
@@ -193,7 +190,7 @@ const searchList = ref<SearchToolProps[]>([
     elementName: 'nSelect',
     name: 'enabled',
     label: '啟用狀態',
-    selectOptions: twiceOptions,
+    selectOptions: EnableOptions,
     option_label: 'label',
     option_value: 'value',
     class: 'form_status'
@@ -236,7 +233,7 @@ const tableData = ref<any>([])
 let pageData = reactive<PageDataType>({
   page_size: 10,
   page: 1,
-  total: 10
+  total: 0
 })
 const changeSize = (val: number) => {
   pageData.page_size = val
