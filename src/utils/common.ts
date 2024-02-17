@@ -164,7 +164,7 @@ export function setNull<T extends Record<string, unknown>>(initialValue: T): T {
 }
 
 // 通用SelectOptions
-type SelectOption = {
+export type SelectOption = {
   label: string
   value: number
 }

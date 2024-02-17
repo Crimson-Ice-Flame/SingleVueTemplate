@@ -30,5 +30,5 @@ export interface PermissionsSet {
   menu_permissions_data: any;
 }
 export interface PermissionsEdit extends PermissionsSet {
-  org_group_id: number;
+  id: number;
 }

@@ -1,5 +1,6 @@
-import type { PermissionList, PermissionSearchParams, PermissionsSet, PermissionsEdit } from '@/models/api/permissions';
-import { post,get, buildParams, deleteHttp } from '@/utils/http';
+import type {  PermissionSearchParams, PermissionsSet, PermissionsEdit } from '@/models/api/permissions';
+import type { SelectOption } from '@/utils/common';
+import { post,get } from '@/utils/http';
 
 /** 取得使用者授權地圖 */
 export const apiGetUserPermission = () => {
@@ -31,38 +32,42 @@ export const apiPostPermissionsEdit = (data: PermissionsEdit) => {
   return post('/permissions/edit', data);
 };
 
-
 /** 停啟用權限群組 */
 export const apiEnablePermission = (id: number) => {
   return post('/permission/enable',{id:id});
 };
+
 /** 刪除權限群組 */
 export const apiDeletePermission = (id: number) => {
   return post('/permission/delete',{id:id});
 };
 
-
-
-export const apiGetPermissionsGroup = (parameter: any) => {
-  return get<PermissionList>('/permissions/group?' + buildParams(parameter));
-};
-
-export const apiPostPermissionsStatus = (parameter: PermissionStatus) => {
-  return post('/permissions/group/status', parameter);
-};
-
-export const apiDeletePermissionsGroup = (parameter: number) => {
-  return deleteHttp('/permissions/group/delete?org_group_id=' + parameter);
-};
-
-export const apiGetPermissionsOrgGroup = (parameter: number, permissionId: number) => {
-  return get(
-    `/permissions/ui/org_group?org_company_id=${parameter}&menu_permission_id=${permissionId}`
-  );
+/** 權限群組下拉選單 */
+const apiGetSelectPermissionGroup = () => {
+  return get('/permission/select');
 };
 
 
-
+/* 通用方法 */
+export const permissionGroupOptions = async () : Promise<SelectOption[]> => {
+  try {
+    const rep = await apiGetSelectPermissionGroup();
+    if(rep.status !== 1) {
+      return [];
+    }
+    else{
+      return rep.result.map((item: { id: number; name: string; }) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 
 
 

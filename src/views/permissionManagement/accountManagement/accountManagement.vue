@@ -14,7 +14,7 @@
     </n-row>
     <ViewTable :haveIndexColumn="true" :tableList="tableList" :tableData="tableData" class="blue">
       <template #group_name="value">
-        <div v-for="(i, key) in value.row.group_name" :key="key">{{ i }}</div>
+        <div v-for="(i, key) in value.row.groups" :key="key">{{ i.group_name }}</div>
       </template>
       <template #updated_at="value">
         <DateTime :timestamp="value.row.updated_at"></DateTime>
@@ -149,7 +149,7 @@ import DateTime from '@/components/DateTime/DateTime.vue'
 import PaginationVue from '@/components/pagination/PaginationTool.vue'
 
 // Utils
-import { setNull, showNotification,EnableOptions } from '@/utils/common'
+import { setNull, showNotification,EnableOptions, type SelectOption } from '@/utils/common'
 
 // Apis
 import {
@@ -168,6 +168,7 @@ import type { SearchToolProps } from '@/models/components/searchTool'
 import type { TableField } from '@/models/components/viewTable'
 import { type PageDataType } from '@/models/components/pagination'
 import type { UserCreateModel, UserCreateReq, UserListReq, UserResetPwModel, UserResetPwReq, UserUpdateReq } from '@/models/api/user'
+import { permissionGroupOptions } from '@/apis/permission'
 
 // import { getPermissionID } from '@/utils/permission';
 
@@ -175,11 +176,16 @@ const permissionTarget = 'Account_Management'
 const route = useRoute()
 const router = useRouter()
 
+const permissionOptions = ref<SelectOption[]>([])
+
 const searchList = ref<SearchToolProps[]>([
   {
-    elementName: 'nInput',
+    elementName: 'nSelect',
     name: 'group_id',
-    label: '權限群組'
+    label: '權限群組',
+    selectOptions: permissionOptions,
+    option_label: 'label',
+    option_value: 'value'
   },
   {
     elementName: 'nInput',
@@ -223,7 +229,7 @@ const getList = () => {
 const tableList = ref<TableField[]>([
   { label: '帳號', name: 'account', sortable: true },
   { label: '暱稱', name: 'nickname' },
-  { label: '權限群組', name: 'group_name', sortable: true },
+  { label: '權限群組', name: 'group_name', elementName: 'slot' },
   { label: '更新時間', name: 'updated_at', elementName: 'slot' },
   { label: '啟用狀態', name: 'enabled', elementName: 'slot', width: 95 },
   { label: '操作', name: 'operator', elementName: 'slot', width: 320 }
@@ -261,16 +267,7 @@ const toAdd = () => {
   showAccountFormDialog.value = true
   accountFormModel.value = setNull(accountFormModel.value)
 }
-const permissionOptions = ref([
-  {
-    value: 1,
-    label: 'MasterGroup'
-  },
-  {
-    value: 4,
-    label: 'MasterGroup2'
-  }
-])
+
 const accountFormModel = ref<UserCreateModel>({
   account: '',
   nickname: '',
@@ -485,7 +482,9 @@ const toResetPw = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async() => {
   getList()
+  permissionOptions.value = await permissionGroupOptions();
+
 })
 </script>

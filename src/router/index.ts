@@ -6,65 +6,59 @@ export const routes =  [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (About.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/AboutView.vue')
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     redirect: '/dashboard/index',
-    // route level code-splitting
-    // this generates a separate chunk (About.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: Layout,
     children: [
       // 首頁
       {
         path: 'index',
         component: HomeView,
-        meta: {
-          title: 'Home',
-        },
-        name: 'home'
+        name: 'Page_Home'
       }
     ]
   },
   {
     path: '/navigate',
     component: Layout,
+    name: 'Page_Navigate_Web_Management',
+    redirect: '/navigate/report',
     children: [
       {
         // 当 /user/:id/profile 匹配成功
         // UserProfile 将被渲染到 User 的 <router-view> 内部
-        path: 'board',
+        path: 'report',
         component: () =>  import('@/views/navigate/navigateBoard.vue'),
-        name: 'board',
+        name: 'Page_Navigate_Web_Report',
       }
     ],
   }, 
   {
     path: '/permission',
     component: Layout,
+    name: 'Page_Permission_Management',
+    redirect: '/permission/account',
     children: [
       {
         // 当 /user/:id/profile 匹配成功
         // UserProfile 将被渲染到 User 的 <router-view> 内部
         path: 'account',
         component: () =>  import('@/views/permissionManagement/accountManagement/accountManagement.vue'),
-        name: 'account',
+        name: 'Page_Account_Management',
       }, {
         path: 'authority',
         component: () =>  import('@/views/permissionManagement/authorityManagement/authorityManagement.vue'),
-        name: 'authority',
+        name: 'Page_Permission_Group_Management',
       },
       // 權限管理 - 新增/編輯/檢視
       {
         path: 'management/:pageType/:id?',
         component: () =>
-          import('@/views/permissionManagement/authorityManagement/authorityManagementSet.vue'),
-        name: 'management'
+          import('@/views/permissionManagement/authorityManagement/authorityManagementSet.vue')
       }
     ],
   },
@@ -99,65 +93,6 @@ export type AddRouteRecordRaw = RouteRecordRaw & {
   children?: any;
 };
 
-declare module 'vue-router' {
-  interface RouteMeta {
-    title: string;
-    icon?: string;
-    requiresAuth: boolean;
-    requiresPermission?: { key: string; fns?: string[] };
-    hidden?: boolean;
-  }
-}
-
-/** 篩選有權限的路由 */
-export function filterPermissionRouters(
-  routers: AddRouteRecordRaw[],
-  permissions: any
-): AddRouteRecordRaw[] {
-  const result: AddRouteRecordRaw[] = [];
-  routers.forEach(route => {
-    const newRoute = Object.assign({}, route);
-    if (havePermission(newRoute, permissions)) {
-      result.push(newRoute);
-      if (newRoute.children && newRoute.children.length) {
-        newRoute.children = filterPermissionRouters(newRoute.children, permissions);
-      }
-    }
-  });
-  return result;
-}
-
-/** 判斷是否擁有路由的權限 */
-function havePermission(
-  route: AddRouteRecordRaw | RouteLocationNormalized,
-  permissions: any
-): boolean {
-  let flag = true;
-
-  if (route.meta && route.meta.requiresPermission) {
-    const key = route.meta.requiresPermission.key;
-    const fns = route.meta.requiresPermission.fns;
-
-    // 除了要判斷是否有檢視權限，如果該頁為功能頁面，還要判斷是否有功能的權限
-    // 功能指的是 ['ADD', 'EDIT', 'DELETE']
-    if (permissions[key]?.VIEW !== undefined) {
-      if (fns !== undefined) {
-        for (const fn of fns) {
-          if (Object.keys(permissions[key]).includes(fn)) {
-            flag = true;
-            break;
-          }
-        }
-      } else {
-        flag = true;
-      }
-    } else {
-      flag = false;
-    }
-  }
-
-  return flag;
-}
 // Layout
 import Layout from '@/layout/layoutDashboard.vue';
 const router = createRouter({

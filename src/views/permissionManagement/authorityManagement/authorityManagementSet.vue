@@ -188,7 +188,8 @@ import { showNotification, isEqual } from '@/utils/common';
 import { pageTypePermissionCheck } from '@/utils/permission';
 import {
   alwaysCheck,
-  checkWithView
+  checkWithView,
+  permissionGroupMap
 } from '@/views/permissionManagement/authorityManagement/permissionCheckDisabled';
 
 // components
@@ -211,14 +212,6 @@ const orgGroupId: number = Number(route.params.id);
 
 // pageTypePermissionCheck(permissionTarget, pageType);
 
-const permissionGroupMap = new Map([
-  ["Page_Home", "首頁"],
-  ["Page_Permission_Management", "權限管理"],
-  ["Page_Account_Management", "帳號管理"],
-  ['Page_Permission_Group_Management', '權限群組管理'],
-  ['Page_Navigate_Web_Management', '導航網管理'],
-  ['Page_Navigate_Web_Report', '數據報表']
-]);
 
 
 function isShowCheckBox(data: any, access_type: string) {
@@ -527,7 +520,7 @@ const submitForm = () => {
         });
       } else if (pageType === 'edit') {
         const submitEddData: PermissionsEdit = {
-          org_group_id: orgGroupId,
+          id: orgGroupId,
           ...submitData
         };
         apiPostPermissionsEdit(submitEddData).then(res => {
@@ -549,7 +542,7 @@ const submitNotification = (status: number) => {
 // 回權限列表
 const goBack = () => {
   // store.dispatch('breadcrumbReload/GO_BACK', 'authority_management');
-  router.push({ name: 'authority' });
+  router.push({ name: 'Page_Permission_Group_Management' });
 };
 
 // 取消按鈕事件
@@ -645,6 +638,7 @@ function resizeHandler(e: Event): void {
 
 // Hooks
 onActivated(async () => {
+  
   getList();
   treeBodyHeightSet();
   window.addEventListener('resize', resizeHandler);

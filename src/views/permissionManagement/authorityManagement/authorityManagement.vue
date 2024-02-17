@@ -76,29 +76,15 @@ import type { SearchToolProps } from '@/models/components/searchTool';
 import type { TableField } from '@/models/components/viewTable';
 // Utils
 
-import { showNotification,EnableOptions } from '@/utils/common';
+import { showNotification,EnableOptions, type SelectOption } from '@/utils/common';
 import type { PageDataType } from '@/models/components/pagination';
 import type { PermissionSearchParams } from '@/models/api/permissions';
-import { apiEnablePermission, apiGetPermissionList,apiDeletePermission } from '@/apis/permission';
+import { apiEnablePermission, apiGetPermissionList,apiDeletePermission, permissionGroupOptions } from '@/apis/permission';
 // import { getPermissionID } from '@/utils/permission';
 
 const permissionTarget: string = 'Authority_Management';
 
-const route = useRoute();
-// Event Function
-// const getGroup = (val: number) => {
-//   const permissionID = getPermissionID(permissionTarget, 'VIEW');
-
-//   //清除群組權限選項
-//   delete searchRef.value.searchData['group_id'];
-//   groups.value = [];
-
-//   if (val === undefined || permissionID === undefined) return;
-
-//   apiGetPermissionsOrgGroup(val, permissionID).then(res => {
-//     groups.value = res.result;
-//   });
-// };
+const permissionOptions = ref<SelectOption[]>([])
 
 const router = useRouter();
 
@@ -107,9 +93,12 @@ const groups = ref([]);
 const searchRef = ref<any>();
 const searchList = ref<SearchToolProps[]>([
   {
-    elementName: 'nInput',
+    elementName: 'nSelect',
     name: 'group_name',
-    label: '權限群組'
+    label: '權限群組',
+    selectOptions: permissionOptions,
+    option_label: 'label',
+    option_value: 'value'
   },
   {
     elementName: 'nSelect',
@@ -162,15 +151,13 @@ const changePage = (val: number) => {
 ///////pagination
 
 const toAdd = () => {
-  router.push({ name: 'management', params: { pageType: 'add' }});
-  const pageType = 'add';
-  // router.push({ path: '/permission/authority_management_set', params: { pageType } });
+  router.push({ path: `/permission/management/add` });
 };
 const toView = (id: string) => {
-  router.push({ name: 'management', params: { pageType: 'view', id: id } });
+  router.push({ path: `/permission/management/view/${id}` });
 };
 const toEdit = (id: string) => {
-  router.push({ name: 'management', params: { pageType: 'edit', id: id } });
+  router.push({ path: `/permission/management/edit/${id}` });
 };
 
 const handleSwitchChange = (value: boolean, id: number) =>{
@@ -208,7 +195,9 @@ const getPermissionList = () => {
 };
 
 
-onMounted(() => {
+onMounted(async() => {
   getPermissionList();
+  permissionOptions.value = await permissionGroupOptions();
+
 });
 </script>
