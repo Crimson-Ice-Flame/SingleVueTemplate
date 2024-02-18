@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm run type-check && pnpm run build-only",
-    "build:dev": "pnpm run build -- --mode development",
-    "build:stage": "pnpm run build -- --mode staging",
+    "build:dev": "pnpm run build --mode development",
+    "build:prod": "pnpm run build  --mode production",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
