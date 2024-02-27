@@ -16,13 +16,14 @@ img {
   height: auto;
 }
 
-[disabled],
-.is-disabled {
+[disabled]:not([disabled='false']),
+.is-disabled,
+[limit],
+.limit {
+  cursor: not-allowed !important;
   filter: grayscale(1) !important;
-  pointer-events: none !important;
 }
 
-[limit],
 .hidden {
   visibility: hidden;
   pointer-events: none !important;
@@ -129,6 +130,20 @@ img {
     }
     &_2 {
       margin-bottom: 24px;
+    }
+    &r{
+      &_1 {
+        margin-bottom: 1rem;
+      }
+      &_2 {
+        margin-bottom: 2rem;
+      }
+      &_3 {
+        margin-bottom: 3rem;
+      }
+      &_4 {
+        margin-bottom: 4rem;
+      }
     }
   }
   &r {

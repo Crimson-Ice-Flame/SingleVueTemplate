@@ -21,9 +21,9 @@
             <Sidebar></Sidebar>
           </n-layout-sider>
           <n-layout>
-            <div class="app_main_height">
+              <n-scrollbar style="max-height: calc(100vh - 80px - 50px)" trigger="none">
               <AppMain></AppMain>
-            </div>
+            </n-scrollbar>
             <Footer></Footer>
           </n-layout>
         </n-layout>
@@ -80,8 +80,5 @@ const collapsed = ref(false);
 }
 .slider_height {
   height: calc(100vh - 80px);
-}
-.app_main_height {
-  height: calc(100vh - 80px - 50px);
 }
 </style>

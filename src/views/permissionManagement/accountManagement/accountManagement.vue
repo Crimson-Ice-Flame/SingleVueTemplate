@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-row class="top_form_wrapper" :gutter="10" align="bottom" justify="space-between">
+     <n-row class="top_form_wrapper" :gutter="10" align="bottom" justify="space-between">
       <n-col :span="20">
         <SearchTool
           :searchModel="searchData"
@@ -9,9 +9,11 @@
         />
       </n-col>
       <n-col :span="4" class="buttons">
-        <n-button type="warning" @click="toAdd">新增 </n-button>
+        <n-space justify="end">
+        <n-button  type="warning" v-permission="`${permissionTarget}:ADD`" @click="toAdd">新增 </n-button>
+      </n-space>
       </n-col>
-    </n-row>
+    </n-row> 
     <ViewTable :haveIndexColumn="true" :tableList="tableList" :tableData="tableData" class="blue">
       <template #group_name="value">
         <div v-for="(i, key) in value.row.groups" :key="key">{{ i.group_name }}</div>
@@ -23,11 +25,11 @@
         {{ value.row.account }}
       </template>
       <template #enabled="value">
-        <n-switch v-model:value="value.row.enabled" @update:value="handleSwitchChange($event, value.row.id)" />
+        <n-switch v-model:value="value.row.enabled" v-permission="`${permissionTarget}:EDIT`" @update:value="handleSwitchChange($event, value.row.id)" />
       </template>
       <template #operator="value">
-        <n-button class="btn_sure mr_1" @click="showResetForm(value.row)">密碼重置</n-button>
-        <button class="btn_operator text_edit" @click="toEdit(value.row.id)">
+        <n-button class="btn_sure mr_1" v-permission="`${permissionTarget}:EDIT`" @click="showResetForm(value.row)">密碼重置</n-button>
+        <button class="btn_operator text_edit" v-permission="`${permissionTarget}:EDIT`" @click="toEdit(value.row.id)">
           <span class="icon-6"></span>
         </button>
         <n-popconfirm
@@ -36,7 +38,7 @@
           @positive-click="handlePositiveClick(value.row.id)"
         >
           <template #trigger>
-            <button class="btn_operator text_delete">
+            <button class="btn_operator text_delete" v-permission="`${permissionTarget}:DELETE`">
               <i class="icon-33"></i>
             </button>
           </template>
@@ -149,7 +151,7 @@ import DateTime from '@/components/DateTime/DateTime.vue'
 import PaginationVue from '@/components/pagination/PaginationTool.vue'
 
 // Utils
-import { setNull, showNotification,EnableOptions, type SelectOption } from '@/utils/common'
+import { setNull, showNotification } from '@/utils/common'
 
 // Apis
 import {
@@ -169,23 +171,19 @@ import type { TableField } from '@/models/components/viewTable'
 import { type PageDataType } from '@/models/components/pagination'
 import type { UserCreateModel, UserCreateReq, UserListReq, UserResetPwModel, UserResetPwReq, UserUpdateReq } from '@/models/api/user'
 import { permissionGroupOptions } from '@/apis/permission'
+import { EnableOptions, type SelectOption } from '@/utils/dropdownOptions'
 
 // import { getPermissionID } from '@/utils/permission';
 
 const permissionTarget = 'Account_Management'
-const route = useRoute()
-const router = useRouter()
 
 const permissionOptions = ref<SelectOption[]>([])
 
 const searchList = ref<SearchToolProps[]>([
   {
-    elementName: 'nSelect',
-    name: 'group_id',
-    label: '權限群組',
-    selectOptions: permissionOptions,
-    option_label: 'label',
-    option_value: 'value'
+    elementName: 'nInput',
+    name: 'group_name',
+    label: '權限群組'
   },
   {
     elementName: 'nInput',
@@ -203,7 +201,7 @@ const searchList = ref<SearchToolProps[]>([
   }
 ])
 const searchData = ref<UserListReq>({
-  group_id: null,
+  group_name: null,
   account: null,
   enabled: null
 })
@@ -221,7 +219,7 @@ const getList = () => {
   apiGetUserList(query).then((res) => {
     if (res.status === 1) {
       tableData.value = res.result.page_data
-      pageData.total = res.result.page_info.total
+      pageData.page_count = res.result.page_info.page_count
     }
   })
 }
@@ -239,7 +237,7 @@ const tableData = ref<any>([])
 let pageData = reactive<PageDataType>({
   page_size: 10,
   page: 1,
-  total: 0
+  page_count: 1
 })
 const changeSize = (val: number) => {
   pageData.page_size = val
@@ -474,6 +472,7 @@ const toResetPw = () => {
   }
   apiResetUserAccount(query).then((res) => {
     if (res.status === 1) {
+      showResetDialog.value = false 
       showNotification('success', '重置成功', 'success')
     }
   })

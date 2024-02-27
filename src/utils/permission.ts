@@ -1,8 +1,8 @@
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { useRouter } from 'vue-router';
 
 
-const store = usePermissionStore();
+
 
 /**取得權限的ID
  * @param { string } key - 權限的 target
@@ -10,6 +10,7 @@ const store = usePermissionStore();
  * @returns {(number | undefined)}
  */
 export const getPermissionID = (key: string, fn: string): number | undefined => {
+  const store = usePermissionStore();
   if (key && fn) {
     const permissions: { [key: string]: { [fn: string]: number | undefined } } = store.userPermissions;
     if (permissions[key] && permissions[key][fn] !== undefined) {

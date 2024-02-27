@@ -34,14 +34,9 @@ const wrap = (name: any, component: any) => {
 <template>
   <div class="app_main">
     <router-view v-slot="{ Component, route }" class="main_content">
-      <keep-alive>
+      <!-- <keep-alive> -->
           <component :is="wrap(route.path, Component)" :key="key" />
-        </keep-alive>
-      <!-- <transition>
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </transition> -->
+        <!-- </keep-alive> -->
     </router-view>
   </div>
 </template>

@@ -2,22 +2,24 @@
   <div>
     <div class="board">
       <div class="board_inner">
-        <el-row class="board_head">
-          <el-col :span="12">
+        <n-row class="board_head">
+          <n-col :span="12">
             <h2 class="board_title">{{ headTitle }}</h2>
-          </el-col>
-          <el-col class="buttons" :span="12">
-            <el-button class="btn_cancel" @click="cancel()">取消</el-button>
-            <el-button
+          </n-col>
+          <n-col class="buttons" :span="12">
+            <n-space justify="end">
+            <n-button class="btn_cancel" @click="cancel()">取消</n-button>
+            <n-button
               v-if="!isView"
               class="btn_sure"
               type="primary"
               @click="submitForm()"
             >
               儲存
-            </el-button>
-          </el-col>
-        </el-row>
+            </n-button>
+          </n-space>
+          </n-col>
+        </n-row>
         <el-form
           ref="ruleFormRef"
           :model="orgGroupForm"
@@ -35,13 +37,14 @@
               show-word-limit
             />
           </el-form-item>
-          <el-button
+          <n-button
             v-if="pageType !== 'view'"
             class="btn_allowAll"
+            secondary
             @click="checkPermission('all')"
           >
           允許全部權限
-          </el-button>
+          </n-button>
         </el-form>
         <div class="tree_container">
           <div class="tree_head">
@@ -637,8 +640,7 @@ function resizeHandler(e: Event): void {
 }
 
 // Hooks
-onActivated(async () => {
-  
+onMounted(() => {
   getList();
   treeBodyHeightSet();
   window.addEventListener('resize', resizeHandler);

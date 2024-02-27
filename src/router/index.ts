@@ -1,13 +1,15 @@
-import { createRouter, createWebHashHistory, type RouteLocationNormalized, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHashHistory,
+  type RouteLocationNormalized,
+  type RouteRecordRaw
+} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { appAuthStore } from '@/stores/user';
+import Layout from '@/layout/layoutDashboard.vue'
 
-export const routes =  [
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
-  },
+import { appAuthStore } from '@/stores/user'
+
+export const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -25,18 +27,16 @@ export const routes =  [
   {
     path: '/navigate',
     component: Layout,
-    name: 'Page_Navigate_Web_Management',
-    redirect: '/navigate/report',
     children: [
       {
         // 当 /user/:id/profile 匹配成功
         // UserProfile 将被渲染到 User 的 <router-view> 内部
-        path: 'report',
+        path: 'dashboard',
         component: () =>  import('@/views/navigate/navigateBoard.vue'),
-        name: 'Page_Navigate_Web_Report',
+        name: 'Page_Navigate_Web_Report'
       }
-    ],
-  }, 
+    ]
+  },
   {
     path: '/permission',
     component: Layout,
@@ -47,12 +47,15 @@ export const routes =  [
         // 当 /user/:id/profile 匹配成功
         // UserProfile 将被渲染到 User 的 <router-view> 内部
         path: 'account',
-        component: () =>  import('@/views/permissionManagement/accountManagement/accountManagement.vue'),
-        name: 'Page_Account_Management',
-      }, {
+        component: () =>
+          import('@/views/permissionManagement/accountManagement/accountManagement.vue'),
+        name: 'Page_Account_Management'
+      },
+      {
         path: 'authority',
-        component: () =>  import('@/views/permissionManagement/authorityManagement/authorityManagement.vue'),
-        name: 'Page_Permission_Group_Management',
+        component: () =>
+          import('@/views/permissionManagement/authorityManagement/authorityManagement.vue'),
+        name: 'Page_Permission_Group_Management'
       },
       // 權限管理 - 新增/編輯/檢視
       {
@@ -60,7 +63,7 @@ export const routes =  [
         component: () =>
           import('@/views/permissionManagement/authorityManagement/authorityManagementSet.vue')
       }
-    ],
+    ]
   },
   // 登入
   {
@@ -87,21 +90,19 @@ export const routes =  [
     redirect: '/PageNotFound',
     name: 'catchAll'
   }
-];
+]
 
 export type AddRouteRecordRaw = RouteRecordRaw & {
-  children?: any;
-};
+  children?: any
+}
 
-// Layout
-import Layout from '@/layout/layoutDashboard.vue';
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
 
 router.beforeEach((to, from, next) => {
-  const isLogin = localStorage.getItem('token')?.trim();
+  const isLogin = localStorage.getItem('token')?.trim()
   if (to.name !== 'login' && isLogin === undefined) next({ name: 'login' })
   else next()
 })

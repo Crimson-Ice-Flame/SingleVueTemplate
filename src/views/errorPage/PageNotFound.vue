@@ -5,10 +5,10 @@
         <h1>Oh no...</h1>
         <div class="error-text">404 error</div>
         <p>一不小心闖進未知領域，請點擊下方按鈕返回首頁</p>
-        <el-button class="btn_goBack" @click="goBack">
+        <n-button class="btn_goBack" secondary @click="goBack">
           回首頁
           <img src="@/assets/images/errorPage/go_back_icon.png" />
-        </el-button>
+        </n-button>
       </div>
       <div class="img_content">
         <img src="@/assets/images/errorPage/error-image.png" />

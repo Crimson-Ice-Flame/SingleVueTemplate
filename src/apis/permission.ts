@@ -1,5 +1,5 @@
 import type {  PermissionSearchParams, PermissionsSet, PermissionsEdit } from '@/models/api/permissions';
-import type { SelectOption } from '@/utils/common';
+import type { SelectOption } from '@/utils/dropdownOptions';
 import { post,get } from '@/utils/http';
 
 /** 取得使用者授權地圖 */

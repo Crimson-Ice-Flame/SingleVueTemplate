@@ -1,6 +1,9 @@
 <template>
   <div class="navbar">
     <div class="content">
+      <div class="logo">
+        <img src="@/assets/images/logo/free_logo2.png" />
+      </div>
       <el-dropdown class="user_dropdown">
         <a class="user_dropdown_link">{{ authStore.getUserAccount.charAt(0) }}</a>
         <template #dropdown>

@@ -8,26 +8,16 @@
 
 <script lang="ts" setup>
 import type { MenuOption } from 'naive-ui'
-// import CommunityIcon from '@/components/icons/IconCommunity.vue'
-// import SupportIcon from '@/components/icons/IconSupport.vue'
-import { NIcon } from 'naive-ui'
 
-import { usePermissionStore } from '@/stores/permission'
+import { usePermissionStore } from '@/stores/permissionStore'
 import { permissionGroupMap } from '@/views/permissionManagement/authorityManagement/permissionCheckDisabled'
 import { RouterLink } from 'vue-router';
+import { renderIcon } from '@/components/icons/IconIndex';
 
 const permissionStore = usePermissionStore()
 
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, { default: () => h(icon) })
-}
-
 const menuOptions = ref<any[]>([])
 
-// const handleUpdateValue = (key: string, item: MenuOption) => {
-//   console.log('[onUpdate:value]: ' + JSON.stringify(key))
-//   console.log('[onUpdate:value]: ' + JSON.stringify(item))
-// }
 
 const SideBarMenuMap = (data: any[]) : MenuOption[]=>{
   let menu: MenuOption[] = [];
@@ -40,6 +30,7 @@ const SideBarMenuMap = (data: any[]) : MenuOption[]=>{
             menu.push({
             label: permissionGroupMap.get(item.name),
             key: `go-back-${item.target}`,
+            icon: renderIcon(item.name),
             children: SideBarMenuMap(item.sub_menu_list)
             })
           }else {
@@ -55,6 +46,7 @@ const SideBarMenuMap = (data: any[]) : MenuOption[]=>{
                 { default: () => permissionGroupMap.get(item.name) }
               ),
             key: `go-back-${item.target}`,
+            icon: renderIcon(item.name),
             })
           }
         }
@@ -64,9 +56,6 @@ const SideBarMenuMap = (data: any[]) : MenuOption[]=>{
 
 const loadUserPermission = async() => {
   await permissionStore.getUserPermission();
-  console.log(permissionStore.userPermissionMap);
-  console.log(permissionStore.userPermissions);
-    // console.log(filterPermissionRouters(protectedRoutes, permissionStore.userPermissions));
     const result = SideBarMenuMap(permissionStore.userPermissionMap);
     menuOptions.value = result;
 }

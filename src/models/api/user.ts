@@ -5,7 +5,7 @@ import type { ListData, PaginationOptions } from "./responseResult";
   export interface UserListReq extends Partial<PaginationOptions> {
     account: string | null;
     enabled: boolean | null;
-    group_id: number | null;
+    group_name: number | null;
   }
   export interface UserList {
     id: number;

@@ -5,9 +5,9 @@
         <SearchTool :searchModel="searchData" :searchList="searchList" @handleSearchClick="onSearch" />
       </n-col>
       <n-col :span="4" class="buttons">
-        <n-button  type="warning" @click="toAdd">
-          新增
-        </n-button>
+        <n-space justify="end">
+        <n-button  type="warning" v-permission="`${permissionTarget}:ADD`" @click="toAdd">新增 </n-button>
+      </n-space>
       </n-col>
     </n-row>
     <ViewTable :haveIndexColumn="true" :tableList="tableList" :tableData="tableData" class="blue">
@@ -21,10 +21,10 @@
         <a class="text_link" @click="toView(value.row.org_group_id)">{{ value.row.group_name }}</a>
       </template>
       <template #status="value">
-        <n-switch v-model:value="value.row.enabled" @update:value="handleSwitchChange($event, value.row.org_group_id)" />
+        <n-switch v-model:value="value.row.enabled" v-permission="`${permissionTarget}:EDIT`" @update:value="handleSwitchChange($event, value.row.org_group_id)" />
       </template>
       <template #operator="value">
-        <button class="btn_operator text_edit" @click="toEdit(value.row.org_group_id)">
+        <button class="btn_operator text_edit" v-permission="`${permissionTarget}:EDIT`" @click="toEdit(value.row.org_group_id)">
           <span class="icon-6"></span>
         </button>
         <n-popconfirm
@@ -35,27 +35,14 @@
         >
           <template #trigger>
             <button
-             class="btn_operator text_delete">
+             class="btn_operator text_delete"
+             v-permission="`${permissionTarget}:DELETE`"
+             >
               <i class="icon-33"></i>
             </button>
           </template>
           請問是否刪除此{{ value.row.account }}權限？
         </n-popconfirm>
-        <!-- <button
-          v-permission="`${permissionTarget}:EDIT`"
-          class="btn_operator text_edit"
-          @click="toEdit(value.row.org_group_id)"
-        >
-          <i class="icon icon-6"></i>
-        </button>
-        <button
-          v-if="value.row.use_count === 0"
-          v-permission="`${permissionTarget}:DELETE`"
-          class="btn_operator text_delete"
-          @click="toDelete(value.row.org_group_id)"
-        >
-          <i class="icon icon-33"></i>
-        </button> -->
       </template>
     </ViewTable>
     <PaginationVue
@@ -76,13 +63,13 @@ import type { SearchToolProps } from '@/models/components/searchTool';
 import type { TableField } from '@/models/components/viewTable';
 // Utils
 
-import { showNotification,EnableOptions, type SelectOption } from '@/utils/common';
+import { showNotification } from '@/utils/common';
 import type { PageDataType } from '@/models/components/pagination';
 import type { PermissionSearchParams } from '@/models/api/permissions';
 import { apiEnablePermission, apiGetPermissionList,apiDeletePermission, permissionGroupOptions } from '@/apis/permission';
-// import { getPermissionID } from '@/utils/permission';
+import { EnableOptions, type SelectOption } from '@/utils/dropdownOptions';
 
-const permissionTarget: string = 'Authority_Management';
+const permissionTarget: string = 'Permission_Group_Management';
 
 const permissionOptions = ref<SelectOption[]>([])
 
@@ -136,7 +123,7 @@ const tableData = ref<any>([]);
 let pageData = reactive<PageDataType>({
   page_size: 10,
   page: 1,
-  total: 0
+  page_count: 1
 })
 const changeSize = (val: number) => {
   console.log('val', val);
@@ -189,7 +176,7 @@ const getPermissionList = () => {
       tableData.value = res.result.page_data;
       pageData.page = res.result.page_info.current_page;
       pageData.page_size = res.result.page_info.page_size;
-      pageData.total = res.result.page_info.total;
+      pageData.page_count = res.result.page_info.page_count;
     }
   });
 };

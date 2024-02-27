@@ -1,6 +1,7 @@
   export interface SearchToolProps {
     elementName:
       | 'nDatepicker'
+      | 'nTimepicker'
       | 'nInput'
       | 'nInputNumber'
       | 'nSelect'
@@ -25,4 +26,7 @@
     startTimestampField?: string;
     elementType?: string;
     valueFormat?: string;
+    shortcuts?: any;
+    seconds?: number | number[];
+    datePickerActions?: Array<'clear' | 'now' | 'confirm'> | null
   }
