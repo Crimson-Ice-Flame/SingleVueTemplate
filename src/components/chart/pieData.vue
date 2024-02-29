@@ -103,7 +103,7 @@ watch(
 )
 </script>
 
-<style scoped ls="scss">
+<style scoped lang="scss">
 .rect {
   height: 8px;
   width: 8px;
@@ -115,14 +115,16 @@ watch(
   height: 100%;
   padding: 12px;
 
-  /deep/ .pie_title {
+  :deep(.pie_title) {
     font-size: 1.17em; /* H3 的大小 */
     color: #333; /* 文字顏色 */
     transition: color 0.3s ease; /* 顏色變化的過渡效果 */
   }
 
-  &:hover /deep/ .pie_title {
-    color: #007BFF; /* 當滑鼠懸停在 .pie 上時，.pie_title 的文字顏色 */
+  &:hover{
+    :deep(.pie_title) {
+      color: #007BFF; /* 當滑鼠懸停在 .pie 上時，.pie_title 的文字顏色 */
+    }
   }
 
   &_chart {

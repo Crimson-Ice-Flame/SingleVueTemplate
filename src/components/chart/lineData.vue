@@ -86,17 +86,30 @@ export default defineComponent({
         .range([INNER_HEIGHT, 0]) // 輸出範圍為內部高度到 0
         .nice() // 使比例尺的範圍變得更加整潔
 
+      // 添加 x 軸
+      group
+        .append('g')
+        .attr('class', 'x_group')
+        .attr('transform', `translate(0, ${INNER_HEIGHT})`) // 將 x 軸移動到底部
+        .call(d3.axisBottom(xScale)) // 使用時間比例尺
+
+      // 添加 y 軸
+      group
+        .append('g')
+        .attr('class', 'y_group')
+        .call(d3.axisLeft(yScale).tickSize(-INNER_WIDTH).tickPadding(10)) // 使用線性比例尺，刻度長度為內部寬度，刻度與軸的距離為 10    
+    
         const xScaleCreate = (d: DataPoint) => xScale(String(d[dataAnalyticalCategory]));
+
       // 創建一個線生成器
       const createLine = (valueKey: keyof DataPoint) =>
         d3
           .line<DataPoint>() // 線生成器
           .x((d) => xScaleCreate(d)!) // x 值為年份
           .y((d) => yScale(Number(d[valueKey]))) // y 值為對應的數值
-      
+
       // 創建一個文本生成器
       const createText = (valueKey: keyof DataPoint) => (d: DataPoint) => {
-       
         let xScaleSet = xScaleCreate(d)
         if(xScaleSet !== undefined) {
           group
@@ -107,7 +120,7 @@ export default defineComponent({
             .text(d[valueKey]) // 文本內容為對應的數值
         }
       }
-      
+
       // 對每一個鍵值創建一條線和對應的文本
       keys.forEach((key) => {
         props.data.forEach((d) => {
@@ -121,15 +134,6 @@ export default defineComponent({
           .attr('stroke-width', 2) // 線寬為 2
           .attr('stroke', key === keys[0] ? '#1f77b4' : '#2ca02c') // 線色為藍色或綠色
       })
-
-      // 添加 x 軸
-      group
-        .append('g')
-        .attr('transform', `translate(0, ${INNER_HEIGHT})`) // 將 x 軸移動到底部
-        .call(d3.axisBottom(xScale)) // 使用時間比例尺
-
-      // 添加 y 軸
-      group.append('g').call(d3.axisLeft(yScale).tickSize(-INNER_WIDTH).tickPadding(10)) // 使用線性比例尺，刻度長度為內部寬度，刻度與軸的距離為 10
     }
 
     const haveData = computed(() => props.data !== undefined && props.data !== null && props.data.length > 0)
@@ -159,7 +163,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped ls="scss">
+<style scoped lang="scss">
 .rect1 {
   margin-right: 5px;
   height: 12px;
@@ -180,5 +184,14 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   margin: 5px;
+}
+
+:deep(.y_group) {
+  .tick:nth-of-type(2),
+  .tick:nth-of-type(2) ~ .tick{
+    line {
+      stroke: #e3e3e3;
+    }
+  }
 }
 </style>
