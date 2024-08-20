@@ -1,59 +1,82 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import TheWelcome from './components/TheWelcome.vue'
+
+import { ref } from 'vue';
+
+const size = ref(10);
+
+function changeSize() {
+  size.value = 40;
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div class="grid lg:grid-cols-2 2xl:grid-cols-5 bg-gray-100">
+    <div
+      class="px-8 py-12 max-w-md mx-auto sm:max-w-xl lg:px-12 lg:py-24 lg:max-w-full 2xl:mr-0 2xl:col-span-2 " 
+    >
+      <div class="xl:max-w-xl">
+        <img :class="`h-${size}`" src="./assets/banner.svg" alt="Work Cation Logo" />
+        <img
+          class="mt-6 rounded-lg shadow-xl sm:mt-8 sm:h-64 sm:w-full sm:object-cover lg:hidden"
+          src="./assets/beach-work.jpg"
+          alt="Woman workcationing on the beach"
+        />
+
+        <h1
+          class="mt-6 text-gray-900 font-bold text-2xl sm:mt-8 sm:text-4xl lg:text-3xl xl:text-4xl font-headline tracking-tight"
+        >
+          You can work from anywhere.
+          <br class="hidden lg:inline" />
+          <span class="text-ice-dark">Take advantage of it.</span>
+        </h1>
+        <p class="mt-2 text-gray-600 sm:mt-4 sm:text-xl">
+          Workcation helps you find work-friendly rentals in beautiful locations so you can enjoy
+          some nice weather even when you're not on vacation.
+        </p>
+        <div class="mt-4 space-x-2 sm:mt-6">
+          <a class="btn btn-primary hover:-translate-y-0.5 transition transform"
+            href="#"
+            >Book your escape</a
+          >
+          <a class="btn btn-light"
+            href="#"
+           
+            >Learn More</a
+          >
+          <button class="btn" @click="changeSize">Change</button>
+        </div>
+      </div>
+    </div>
+    <div class="hidden relative lg:block 2xl:col-span-3">
+      <img
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        src="./assets/beach-work.jpg"
+        alt="Woman workcationing on the beach"
+      />
+    </div>
+  </div>
+  <!-- <header>
+    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it! Update" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <HelloWorld msg="You did it!" />
     </div>
   </header>
 
-  <RouterView />
+  <main>
+    <TheWelcome />
+  </main> -->
 </template>
-
 <style scoped>
 header {
   line-height: 1.5;
-  max-height: 100vh;
 }
 
 .logo {
   display: block;
   margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
 }
 
 @media (min-width: 1024px) {
@@ -71,15 +94,6 @@ nav a:first-of-type {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>
