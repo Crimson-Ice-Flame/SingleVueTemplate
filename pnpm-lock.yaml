@@ -11,6 +11,9 @@ dependencies:
   vue:
     specifier: ^3.4.29
     version: 3.4.38(typescript@5.4.5)
+  vue-router:
+    specifier: ^4.0.13
+    version: 4.0.13(vue@3.4.38)
 
 devDependencies:
   '@rushstack/eslint-patch':
@@ -25,6 +28,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.14.5
     version: 20.14.15
+  '@types/vue-router':
+    specifier: ^2.0.0
+    version: 2.0.0(vue@3.4.38)
   '@vitejs/plugin-vue':
     specifier: ^5.0.5
     version: 5.1.2(vite@5.4.1)(vue@3.4.38)
@@ -1030,6 +1036,15 @@ packages:
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
     dev: true
 
+  /@types/vue-router@2.0.0(vue@3.4.38):
+    resolution: {integrity: sha512-E454lQ6tp9ftVWdZ8VGZpRcIV4YeqVAcx/uifl3P1GGwscYsxOFdYfgIuKasKO0Fm6Np2JM/L378D3bcRQE9hg==}
+    deprecated: This is a stub types definition for vue-router (https://github.com/vuejs/vue-router). ecmarkup provides its own type definitions, so you don\'t need @types/ecmarkup installed!
+    dependencies:
+      vue-router: 4.0.13(vue@3.4.38)
+    transitivePeerDependencies:
+      - vue
+    dev: true
+
   /@types/yauzl@2.10.3:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
@@ -1321,7 +1336,6 @@ packages:
 
   /@vue/devtools-api@6.6.3:
     resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
-    dev: false
 
   /@vue/devtools-core@7.3.8(vite@5.4.1)(vue@3.4.38):
     resolution: {integrity: sha512-mEwsR7GMklWuPOBH/++DiJe0GWqQ0syDtWP0HhU8m9tebs5zQtujMXrgu+cgBAKquJAWnBz0PwNzBgBD2P+M9A==}
@@ -4794,6 +4808,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-router@4.0.13(vue@3.4.38):
+    resolution: {integrity: sha512-LmXrC+BkDRLak+d5xTMgUYraT3Nj0H/vCbP+7usGvIl9Viqd1UP6AsP0i69pSbn9O0dXK/xCdp4yPw21HqV9Jw==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': 6.6.3
+      vue: 3.4.38(typescript@5.4.5)
 
   /vue-tsc@2.0.29(typescript@5.4.5):
     resolution: {integrity: sha512-MHhsfyxO3mYShZCGYNziSbc63x7cQ5g9kvijV7dRe1TTXBRLxXyL0FnXWpUF1xII2mJ86mwYpYsUmMwkmerq7Q==}
