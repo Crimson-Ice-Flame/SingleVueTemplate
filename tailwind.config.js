@@ -1,19 +1,23 @@
-import plugin from 'tailwindcss/plugin';
+import plugin from 'tailwindcss/plugin'
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class', // or 'media' or 'class'
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-       ice:{
-        DEFAULT: '#0fa9e6',
-        "dark": '#0c87b8',
-        "light": '#3fbaeb',
-       }
+        darkMode: '#1a202c',
+        darkModeSecondary: '#2d3748',
+        lightMode: '#f7fafc',
+        ice: {
+          DEFAULT: '#0fa9e6',
+          important: '#0c87b8',
+          memo: '#3fbaeb'
+        }
       },
       fontFamily: {
-        'headline': "Poppins, sans-serif",
+        headline: 'Poppins, sans-serif'
       }
     }
   },
