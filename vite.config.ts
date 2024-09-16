@@ -19,7 +19,7 @@ export default defineConfig({
       eslintrc: {
         enabled: true
       },
-      imports: ['vue', 'vue-router']
+      imports: ['vue', 'vue-router', 'vue-i18n', 'pinia']
     })
   ],
   resolve: {
