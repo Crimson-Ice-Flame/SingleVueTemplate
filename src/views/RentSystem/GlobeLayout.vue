@@ -58,7 +58,6 @@ watchEffect(() => {
           >
             {{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}
           </button>
-
           <span class="block ml-auto cursor-pointer lg:hidden" @click="toggleDarkMode">
             <svg v-show="isDarkMode" viewBox="0 0 24 24" fill="none" class="w-6 h-6">
               <path
@@ -103,33 +102,26 @@ watchEffect(() => {
               class="text-slate-500 w-8 h-8 flex items-center justify-center hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
               @click="toggleDrawer"
             >
-              <svg width="24" height="24" fill="none" aria-hidden="true" v-show="!showDrawer">
-                <path
-                  d="M12 6v.01M12 12v.01M12 18v.01M12 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-              <svg width="24" height="24" fill="none" aria-hidden="true" v-show="showDrawer">
-                <path
-                  d="M18 6L6 18M6 6l12 12"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
+              <i class="fa-solid fa-bars" v-show="!showDrawer"></i>
+              <i class="fa-solid fa-xmark" v-show="showDrawer"></i>
             </button>
           </div>
         </div>
       </div>
     </nav>
     <Transition name="fade" :duration="500">
-      <div v-show="showDrawer" class="bg-white h-64 fixed w-full z-50 dark:bg-darkMode">
-        <div class="inner">
-          <p class="dark:text-white">somethin text.</p>
+      <div
+        v-show="showDrawer"
+        class="bg-white h-32 fixed w-full z-50 flex justify-center dark:bg-darkMode"
+      >
+        <div class="inner flex-col">
+          <template v-for="(list, index) in homeChildrenList" :key="list.path">
+            <div v-if="index !== 0" class="dark:text-white my-2">
+              <RouterLink :to="list.path === '' ? '/' : list.path">{{
+                $t(list.name!.toString())
+              }}</RouterLink>
+            </div>
+          </template>
         </div>
       </div>
     </Transition>

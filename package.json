@@ -17,6 +17,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "pinia": "^2.1.7",
     "unplugin-auto-import": "^0.18.2",
     "vue": "^3.4.29",
@@ -44,6 +45,8 @@
     "postcss": "^8.4.41",
     "postcss-cli": "^11.0.0",
     "prettier": "^3.2.5",
+    "sass": "^1.79.4",
+    "sass-loader": "^16.0.2",
     "start-server-and-test": "^2.0.4",
     "tailwindcss": "^3.4.10",
     "typescript": "~5.4.0",
