@@ -1,20 +1,20 @@
 # rotki
 
-This template should help get you started developing with Vue 3 in Vite.
+這個模板應該能幫助你開始使用 Vue 3 和 Vite 進行開發。
 
-## Recommended IDE Setup
+## 推薦的 IDE 設置
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (並禁用 Vetur)。
 
-## Type Support for `.vue` Imports in TS
+## `.vue` 文件在 TS 中的類型支持
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+TypeScript 無法默認處理 `.vue` 文件的類型信息，因此我們用 `vue-tsc` 替換 `tsc` CLI 進行類型檢查。在編輯器中，我們需要 [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) 來使 TypeScript 語言服務器能夠識別 `.vue` 類型。
 
-## Customize configuration
+## 自定義配置
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+請參閱 [Vite 配置參考](https://vitejs.dev/config/)。
 
-## Project Setup
+## 專案設置
 
 ```sh
 pnpm install
